@@ -304,55 +304,20 @@ public class Character {
 		}
 	}
 
-	public void attack(Enemy enemy) {
-		this.attackPrompt();
-		if (prompt.getPChoice().equalsIgnoreCase("attack")) {
-			System.out.println(this.name + " attacks the " + enemy.getName());
-			double gotHit = 2 * Math.random();
-			if (gotHit <= 1) {
-				System.out.println("The " + enemy.getName() + " narrowly avoided the attack");
-			} else {
-				System.out.println("the " + enemy.getName() + " was hit by the attack");
-				enemy.takeDmg(this.atk);
-			}
-		} else if (prompt.getPChoice().equalsIgnoreCase("run")) {
-			double gotHit = 6 * Math.random();
-			if (gotHit <= 5) {
-				System.out.println(this.name + " failed to get away");
-			} else {
-				System.out.println(this.name + " successfully ran away");
-				return;
-			}
-		} else if (prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
-			System.out.println(this.name + " uses the " + this.inventory[2].getName());
-			if (this.inventory[2].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[2].getStat() + " health points");
-				this.heal(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[2].getName() + " at the " + enemy.getName() + ", doing some damage");
-				enemy.takeDmg(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[2].getStat());
-				this.updateAtk(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[2].getStat());
-				this.updateDef(this.inventory[2].getStat());
-			}
-		} else {
-			System.out.println("You use the " + this.inventory[3].getName());
-			if (this.inventory[3].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[3].getStat() + " health points");
-				this.heal(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[3].getName() + " at the " + enemy.getName() + ", doing some damage");
-				enemy.takeDmg(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[3].getStat());
-				this.updateAtk(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[3].getStat());
-				this.updateDef(this.inventory[3].getStat());
-			}
+	public void itemEffect(Boss boss, int w){
+		System.out.println(this.name + " uses the " + this.inventory[w].getName());
+		if (this.inventory[w].function.equals("Healing")) {
+			System.out.println(this.name + " heals " + this.inventory[w].getStat() + " health points");
+			this.heal(this.inventory[w].getStat());
+		} else if (this.inventory[w].function.equals("Damage")) {
+			System.out.println(this.name + " throws the " + this.inventory[w].getName() + " at the " + boss.getName() + ", doing some damage");
+			boss.takeDmg(this.inventory[w].getStat());
+		} else if (this.inventory[w].function.equals("buffAtk")) {
+			System.out.println(this.name + "'s attack rises by " + this.inventory[w].getStat());
+			this.updateAtk(this.inventory[2].getStat());
+		} else if (this.inventory[w].function.equals("buffDef")) {
+			System.out.println(this.name + "'s defense rises by " + this.inventory[w].getStat());
+			this.updateDef(this.inventory[w].getStat());
 		}
 	}
 
@@ -376,35 +341,9 @@ public class Character {
 				return;
 			}
 		} else if (prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
-			System.out.println(this.name + " uses the " + this.inventory[2].getName());
-			if (this.inventory[2].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[2].getStat() + " health points");
-				this.heal(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[2].getName() + " at the " + boss.getName() + ", doing some damage");
-				boss.takeDmg(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[2].getStat());
-				this.updateAtk(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[2].getStat());
-				this.updateDef(this.inventory[2].getStat());
-			}
+			this.itemEffect(boss, 2);
 		} else {
-			System.out.println("You use the " + this.inventory[3].getName());
-			if (this.inventory[3].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[3].getStat() + " health points");
-				this.heal(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[3].getName() + " at the " + boss.getName() + ", doing some damage");
-				boss.takeDmg(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[3].getStat());
-				this.updateAtk(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[3].getStat());
-				this.updateDef(this.inventory[3].getStat());
-			}
+			this.itemEffect(boss, 3);
 		}
 	}
 
