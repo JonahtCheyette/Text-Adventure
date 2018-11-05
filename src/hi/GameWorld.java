@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority) make prompt and battle methods static, add a setting name function to Prompt for the player, add a class system to the game, add exp and leveling (possibly tied to class), add a multiline command for shopping balance stuff
+ * TODO:(in order of priority) make prompt and battle methods static, add a setting name function to Prompt for the player, add a class system to the game, add exp and leveling (possibly tied to class), add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
