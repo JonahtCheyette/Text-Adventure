@@ -4,39 +4,23 @@ public class Equipment {
 	int stat;
 	int price;
 	int last;
-	Boolean Armour;
-	Boolean Item;
 	String name;
 	String function;
 	String text;
 
-	Equipment(String function, String name, int price, int Stat, int last, String text) {
+	Equipment(String function, String name, int price, int stat, int last, String text) {
 		this.name = name;
-		this.stat = Stat;
+		this.stat = stat;
 		this.price = price;
 		this.last = last;
 		this.text = text;
 		this.function = function;
-		if (function.equals("armor")) {
-			this.Armour = true;
-			this.Item = false;
-		} else if (function.equals("weapon")) {
-			this.Armour = false;
-			this.Item = false;
-		} else if (function.equals("Damage") || function.equals("Healing") || function.equals("buffAtk") || function.equals("buffDef")) {
-			this.Armour = false;
-			this.Item = true;
-		} else {
-			System.out.println("Check " + name + "'s constructor idiot");
-		}
 	}
 
 	Equipment(String name, int price, String text) {
 		this.name = name;
 		this.price = price;
 		this.text = text;
-		this.Armour = false;
-		this.Item = true;
 		this.function = "passive";
 	}
 
@@ -44,7 +28,6 @@ public class Equipment {
 		this.stat = 0;
 		this.price = 0;
 		this.name = "ERROR";
-		this.Armour = true;
 	}
 
 	public String getText() {
@@ -60,11 +43,11 @@ public class Equipment {
 	}
 
 	public Boolean isArmor() {
-		return this.Armour;
+		return this.function.equalsIgnoreCase("armor");
 	}
 
 	public Boolean isItem() {
-		return this.Item;
+		return function.equals("Damage") || function.equals("Healing") || function.equals("buffAtk") || function.equals("buffDef") || function.equals("passive");
 	}
 	
 	public Boolean isPassive() {

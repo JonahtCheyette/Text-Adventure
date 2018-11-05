@@ -17,17 +17,17 @@ public class Boss {
 	String mName;
 	Random rand = new Random();
 
-	Boss(String name, String mName, int health, int Atk, int goldMax, int minionHealth) {
+	Boss(String name, String mName, int health, int atk, int goldMax, int minionHealth) {
 		this.health = health;
 		this.startHealth = health;
-		this.atk = Atk;
-		this.startAtk = Atk;
+		this.atk = atk;
+		this.startAtk = atk;
 		this.goldMax = goldMax;
 		this.minionHealth = minionHealth;
 		this.name = name;
 		this.mName = mName;
-		for (int i = 0; i < this.pMHealth.length; i++) {
-			this.pMHealth[i] = 0;
+		for (int w = 0; w < this.pMHealth.length; w++) {
+			this.pMHealth[w] = 0;
 		}
 	}
 
@@ -40,7 +40,7 @@ public class Boss {
 	}
 
 	public int getGoldMax() {
-		return this.health;
+		return this.goldMax;
 	}
 
 	public int getMinionHealth() {
@@ -59,19 +59,19 @@ public class Boss {
 		this.cMinions = this.minions;
 		this.damageTook = Dmg;
 		if (this.minions > 0) {
-			for (int i = 0; i < this.minions; i++) {
-				if (this.damageTook > this.pMHealth[i]) {
+			for (int x = 0; x < this.minions; x++) {
+				if (this.damageTook > this.pMHealth[x]) {
 					this.cMinions--;
-					this.damageTook -= this.pMHealth[i];
+					this.damageTook -= this.pMHealth[x];
 				} else {
-					this.pMHealth[i] -= this.damageTook;
+					this.pMHealth[x] -= this.damageTook;
 				}
 				if (this.damageTook < 0) {
 					this.damageTook = 0;
 				}
 			}
-			for (int i = this.cMinions + 1; i < this.minions + 1; i++) {
-				this.pMHealth[i] = 0;
+			for (int y = this.cMinions + 1; y < this.minions + 1; y++) {
+				this.pMHealth[y] = 0;
 			}
 			this.health -= this.damageTook;
 			this.minions = this.cMinions;

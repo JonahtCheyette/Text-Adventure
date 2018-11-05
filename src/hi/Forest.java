@@ -8,12 +8,12 @@ public class Forest {
 	Scanner input = new Scanner(System.in);
 	Character player;
 	Boss[] bossList;
-	Enemy[][] enemyList;
+	Mob[][] enemyList;
 	String[] choices = new String[3];
 	Battle battle;
 	Prompt prompt;
 
-	Forest(Character player, Boss[] bossList, Enemy[][] enemyList, Battle battle) {
+	Forest(Character player, Boss[] bossList, Mob[][] enemyList, Battle battle) {
 		this.player = player;
 		this.battle = battle;
 		this.bossList = bossList;
@@ -32,12 +32,12 @@ public class Forest {
 	public void runForest() {
 		player.updateAtk(0);
 		player.updateDef(0);
-		for (int iiiii = 0; iiiii < this.bossList.length; iiiii++) {
-			this.bossList[iiiii].reset();
+		for (int g = 0; g < this.bossList.length; g++) {
+			this.bossList[g].reset();
 		}
-		for (int io = 0; io < this.enemyList.length; io++) {
-			for (int ii = 0; ii < this.enemyList[io].length; ii++) {
-				this.enemyList[io][ii].reset();
+		for (int h = 0; h < this.enemyList.length; h++) {
+			for (int ia = 0; ia < this.enemyList[h].length; ia++) {
+				this.enemyList[h][ia].reset();
 			}
 		}
 		System.out.println(player.getName()

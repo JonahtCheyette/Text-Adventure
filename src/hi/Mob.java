@@ -1,51 +1,34 @@
 package hi;
 
-import java.util.Random;
-
-public class Enemy {
+public class Mob extends Boss{
 	int whichDmg;
-	int damageTook;
 	int rangeMax;
 	int rangeMin;
-	int startHealth;
-	int startAtk;
-	int goldMax;
-	int minionHealth;
 	int attacked = 0;
 	int summoned = 0;
 	int whiffed = 0;
-	int cMinions = 0;
 	int count = 0;
 	int[] atk;
 	int[] health;
 	int[] minions;
-	int[] pMHealth = new int[15];
-	String name;
-	String mName;
 	Boolean damageTookCheck = false;
-	Random rand = new Random();
 
-	Enemy(String name, String mName, int health, int atk, int rangeMin, int rangeMax, int minionHealth, int goldMax) {
-		this.goldMax = goldMax;
+	Mob(String name, String mName, int health, int atk, int rangeMin, int rangeMax, int minionHealth, int goldMax) {
+		super(name, mName, health, atk, goldMax, minionHealth);
 		this.rangeMin = rangeMin;
 		this.rangeMax = rangeMax;
-		this.minionHealth = minionHealth;
-		this.name = name;
-		this.mName = mName;
-		this.startHealth = health;
-		this.startAtk = atk;
 		this.atk = new int[rangeMax];
 		this.health = new int[rangeMax];
 		this.minions = new int[rangeMax];
-		for (int o = rangeMin; o < rangeMax; o++) {
-			this.atk[o] = -1;
-			this.health[o] = -1;
+		for (int ic = rangeMin; ic < rangeMax; ic++) {
+			this.atk[ic] = -1;
+			this.health[ic] = -1;
 			if (minionHealth > 0) {
-				this.minions[o] = -1;
+				this.minions[ic] = -1;
 			}
 		}
-		for (int i = 0; i < this.pMHealth.length; i++) {
-			this.pMHealth[i] = 0;
+		for (int id = 0; id < this.pMHealth.length; id++) {
+			this.pMHealth[id] = 0;
 		}
 	}
 
@@ -61,38 +44,32 @@ public class Enemy {
 		return this.count;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public String getMName() {
-		return this.mName;
-	}
-
 	public void takeDmg(int Dmg) {
-		for (int p = 0; p < this.health.length; p++) {
-			if (!this.damageTookCheck && this.health[p] > 0) {
-				this.whichDmg = p;
+		this.damageTook = Dmg;
+		for (int ie = 0; ie < this.health.length; ie++) {
+			if (!this.damageTookCheck && this.health[ie] > 0) {
+				this.whichDmg = ie;
 				this.damageTookCheck = true;
 			}
 		}
 		this.cMinions = this.minions[whichDmg];
 		if (this.minions[this.whichDmg] > 0) {
-			for (int i = 0; i < this.minions[this.whichDmg]; i++) {
-				if (this.damageTook > this.pMHealth[i]) {
+			System.out.println(this.cMinions);
+			for (int ig = 0; ig < this.minions[this.whichDmg]; ig++) {
+				if (this.damageTook > this.pMHealth[ig]) {
 					this.cMinions--;
-					this.damageTook -= this.pMHealth[i];
+					this.damageTook -= this.pMHealth[ig];
 				} else {
-					this.pMHealth[i] -= this.damageTook;
+					this.pMHealth[ig] -= this.damageTook;
 				}
 				if (this.damageTook < 0) {
 					this.damageTook = 0;
 				}
 			}
-			for (int i = this.cMinions + 1; i < this.minions[this.whichDmg] + 1; i++) {
-				this.pMHealth[i] = 0;
+			for (int ih = this.cMinions + 1; ih < this.minions[this.whichDmg] + 1; ih++) {
+				this.pMHealth[ih] = 0;
 			}
-			this.health[whichDmg] -= this.damageTook;
+			this.health[this.whichDmg] -= this.damageTook;
 			this.minions[this.whichDmg] = this.cMinions;
 		} else {
 			this.health[this.whichDmg] -= Dmg;
@@ -116,23 +93,23 @@ public class Enemy {
 	}
 
 	public int giveGold() {
-		return (int) (this.count * this.goldMax * Math.random());
+		return super.giveGold() * this.count;
 	}
 
 	public void reset() {
 		this.count = (rand.nextInt((this.rangeMax - this.rangeMin) + 1) + this.rangeMin);
-		for (int r = this.rangeMin; r < this.rangeMax; r++) {
-			this.atk[r] = -1;
-			this.health[r] = -1;
+		for (int ii = this.rangeMin; ii < this.rangeMax; ii++) {
+			this.atk[ii] = -1;
+			this.health[ii] = -1;
 			if (minionHealth > 0) {
-				this.minions[r] = -1;
+				this.minions[ii] = -1;
 			}
 		}
-		for (int s = 0; s < this.count; s++) {
-			this.atk[s] = this.startAtk;
-			this.health[s] = this.startHealth;
+		for (int ij = 0; ij < this.count; ij++) {
+			this.atk[ij] = this.startAtk;
+			this.health[ij] = this.startHealth;
 			if (minionHealth > 0) {
-				this.minions[s] = 0;
+				this.minions[ij] = 0;
 			}
 		}
 	}
@@ -167,7 +144,8 @@ public class Enemy {
 	}
 
 	public void summonMinions(int which) {
-		this.minions[which] += 1;
+		this.minions[which] ++;
 		this.atk[which] = (this.startAtk + 5 * this.minions[which]);
+		this.pMHealth[this.minions[which] - 1] = this.minionHealth;
 	}
 }

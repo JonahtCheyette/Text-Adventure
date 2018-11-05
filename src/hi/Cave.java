@@ -13,10 +13,10 @@ public class Cave {
 	Boss finalBoss;
 	Boss[] bossList = new Boss[1];
 	Battle battle;
-	Enemy[] enemyList = new Enemy[5];
+	Mob[] enemyList = new Mob[5];
 	Prompt prompt;
 
-	Cave(Character player, Boss[] bossList, Enemy[] enemyList, Boss finalBoss, Battle battle) {
+	Cave(Character player, Boss[] bossList, Mob[] enemyList, Boss finalBoss, Battle battle) {
 		this.player = player;
 		this.bossList = bossList;
 		this.enemyList = enemyList;
@@ -52,11 +52,11 @@ public class Cave {
 
 	public void runCave() {
 		this.finalBoss.reset();
-		for (int h = 0; h < this.bossList.length; h++) {
-			this.bossList[h].reset();
+		for (int z = 0; z < this.bossList.length; z++) {
+			this.bossList[z].reset();
 		}
-		for (int ii = 0; ii < this.enemyList.length; ii++) {
-			this.enemyList[ii].reset();
+		for (int a = 0; a < this.enemyList.length; a++) {
+			this.enemyList[a].reset();
 		}
 		battle.encounters(player, this.enemyList, "cave");
 		if (player.getHealth() <= 0 || battle.prompt.getPChoice().equalsIgnoreCase("run") || battle.prompt.getPChoice().equalsIgnoreCase("stop")) {

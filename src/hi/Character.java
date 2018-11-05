@@ -3,32 +3,38 @@ package hi;
 import java.util.Scanner;
 
 public class Character {
+	Boolean godMode = false;
 	int def;
 	int atk;
-	int whichAttacked;
 	int exp = 0;
 	int lv = 1;
 	int health = 100;
-	int gold = 5000;
+	int gold = 250;
 	String name;
 	String fullIvnt;
 	String[] display = new String[2];
 	String[] choices = new String[9];
 	String[] iNames = new String[6];
-	Boolean slotFull;
+	String[] ivntFunctions = new String[] {
+			"Weapon", "Armor", "Item 1", "Item 2", "Passive Item"
+	};
+	Boolean itemInSlot;
 	Equipment equipment;
+	Boolean check = false;
 	Equipment[] inventory = new Equipment[5];
 	Scanner input = new Scanner(System.in);
 	Prompt prompt = new Prompt(this);
 
 	Character(Equipment equipment) {
-		for (int n = 1; n < 4; n++) {
-			this.inventory[n] = null;
+		for (int b = 1; b < 4; b++) {
+			this.inventory[b] = null;
 		}
 		this.inventory[0] = equipment;
 		this.atk = equipment.getStat();
 		this.iNames[0] = equipment.getName();
 		this.equipment = equipment;
+		this.iNames[5] = "exit";
+		this.doGodMode();
 	}
 
 	public void setName(String name) {
@@ -83,67 +89,71 @@ public class Character {
 		return this.name;
 	}
 
-	public Boolean getSlotFull() {
-		return this.slotFull;
+	public Boolean getItemInSlot() {
+		return this.itemInSlot;
+	}
+	
+	public void doGodMode() {
+		if(this.godMode) {
+			this.atk = 1000000;
+			this.def = 1000000;
+			this.gold = 1000000;
+			this.health = 10000000;
+		}
+	}
+	
+	public Boolean isSlotFull(int whichSlot) {
+		if(this.inventory[whichSlot] == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public void openSlot(int choiceNum, int whichSlot, String itemClass) {
+		if (this.isSlotFull(whichSlot)) {
+			System.out.println(itemClass + ": " + this.iNames[whichSlot]);
+			this.choices[choiceNum] = this.iNames[whichSlot];
+		} else {
+			System.out.println(itemClass + ": none");
+		}
 	}
 	
 	public void checkStatus() {
-		System.out.println("health: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold() + "\nWeapon: "
-				+ this.getWeapon().getName());
-		this.choices[4] = this.getWeapon().getName();
-		if (this.getArmor() != null) {
-			System.out.println("Armor: " + this.getArmor().getName());
-			this.choices[5] = this.getArmor().getName();
-		} else {
-			System.out.println("Armor: none");
+		System.out.println("health: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold());
+		for(int c = 0; c < this.inventory.length; c++) {
+			this.openSlot(c+4, c, this.ivntFunctions[c]);
 		}
-		if (this.getItem1() != null) {
-			System.out.println("Item 1: " + this.getItem1().getName());
-			this.choices[6] = this.getItem1().getName();
-		} else {
-			System.out.println("Item 1: none");
-		}
-		if (this.getItem2() != null) {
-			System.out.println("Item 2: " + this.getItem2().getName());
-			this.choices[7] = this.getItem2().getName();
-		} else {
-			System.out.println("Item 2: none");
-		}
-		if (this.getPassiveItem() != null) {
-			System.out.println("Passive Item: " + this.getPassiveItem().getName());
-			this.choices[8] = this.getPassiveItem().getName();
-		} else {
-			System.out.println("Passive Item: none");
-		}
-		this.iNames[5] = "exit";
 		this.display[0] = "exit";
 		this.display[1] = "type an item's name to get that item's info";
-		this.prompt.usePrompt(this.iNames, this.display);
-		if(prompt.getPChoice().equalsIgnoreCase(this.choices[4])) {
-			System.out.println(this.getWeapon().getText());
-		} else if(prompt.getPChoice().equalsIgnoreCase(this.choices[5])) {
-			System.out.println(this.getArmor().getText());
-		} else if(prompt.getPChoice().equalsIgnoreCase(this.choices[6])) {
-			System.out.println(this.getItem1().getText());
-		} else if(prompt.getPChoice().equalsIgnoreCase(this.choices[7])) {
-			System.out.println(this.getItem2().getText());
-		} else if(prompt.getPChoice().equalsIgnoreCase(this.choices[8])) {
-			System.out.println(this.getPassiveItem().getText());
+		this.check = false;
+		while(!this.check) {
+			this.prompt.usePrompt(this.iNames, this.display);
+			for(int d = 0; d < this.inventory.length; d++) {
+				if(this.prompt.getPChoice().equalsIgnoreCase(this.choices[d+4])) {
+					System.out.println(this.inventory[d].getText());
+				}
+			}
+			if(this.prompt.getPChoice().equalsIgnoreCase("exit")) {
+				this.check = true;
+			}
 		}
-		for(int i = this.display.length; i < this.choices.length; i++) {
-			this.choices[i] = null;
+		for(int e = this.display.length; e < this.choices.length; e++) {
+			this.choices[e] = null;
 		}
-		this.iNames[5] = null;
+		this.doGodMode();
 	}
 
 	public void heal(int healBy) {
 		this.health += healBy;
+		this.doGodMode();
 	}
 
 	public void rest() {
 		if (this.health < 100) {
 			this.health = 100;
 		}
+		this.doGodMode();
 	}
 
 	public void Die() {
@@ -151,8 +161,8 @@ public class Character {
 		this.gold = 250;
 		this.exp = 0;
 		this.lv = 1;
-		for (int io = 0; io < this.inventory.length; io++) {
-			this.inventory[io] = null;
+		for (int f = 0; f < this.inventory.length; f++) {
+			this.inventory[f] = null;
 		}
 		this.inventory[0] = this.equipment;
 	}
@@ -161,13 +171,15 @@ public class Character {
 		if (!(Dmg - this.def <= 0)) {
 			this.health -= (Dmg - this.def);
 		}
+		this.doGodMode();
 	}
 
 	public void addItemToInvt(Equipment Equipment) {
-		this.slotFull = false;
+		this.doGodMode();
+		this.itemInSlot = false;
 		if (Equipment.isArmor()) {
 			if (this.inventory[1] != null) {
-				this.slotFull = true;
+				this.itemInSlot = true;
 				this.fullIvnt = this.inventory[1].getName();
 			} else {
 				this.inventory[1] = Equipment;
@@ -177,7 +189,7 @@ public class Character {
 		} else if (Equipment.isItem()) {
 			if (Equipment.getFunction().equalsIgnoreCase("passive")) {
 				if(this.inventory[4] != null) {
-					this.slotFull = true;
+					this.itemInSlot = true;
 					this.fullIvnt = this.inventory[4].getName();
 				}else {
 					this.inventory[4] = Equipment;
@@ -185,7 +197,7 @@ public class Character {
 				}
 			} else {
 				if (this.inventory[2] != null && this.inventory[3] != null) {
-					this.slotFull = true;
+					this.itemInSlot = true;
 					this.fullIvnt = this.inventory[2].getName() + " and a " + this.inventory[3].getName();
 				} else if (this.inventory[2] == null) {
 					this.inventory[2] = Equipment;
@@ -197,7 +209,7 @@ public class Character {
 			}
 		} else {
 			if (this.inventory[0] != null) {
-				this.slotFull = true;
+				this.itemInSlot = true;
 				this.fullIvnt = this.inventory[0].getName();
 			} else {
 				this.inventory[0] = Equipment;
@@ -205,7 +217,7 @@ public class Character {
 				this.atk = Equipment.getStat();
 			}
 		}
-		if (this.slotFull) {
+		if (this.itemInSlot) {
 			if (Equipment.isItem() && !(Equipment.isPassive())) {
 				System.out.println("you already have a " + this.fullIvnt + ". Replace one?");
 				this.prompt.yesNo();
@@ -245,6 +257,11 @@ public class Character {
 				}
 			}
 		}
+		if (this.godMode) {
+			this.atk = 1000000;
+			this.def = 1000000;
+			this.gold = 1000000;
+		}
 	}
 
 	public void useItem(int which) {
@@ -253,26 +270,32 @@ public class Character {
 			this.inventory[2] = this.inventory[3];
 			this.inventory[3] = null;
 		}
+		this.doGodMode();
 	}
 
 	public void updateAtk(int change) {
 		this.atk += change;
+		this.doGodMode();
 	}
 
 	public void updateDef(int change) {
 		this.def += change;
+		this.doGodMode();
 	}
 
 	public void setAtk(int set) {
 		this.atk = set;
+		this.doGodMode();
 	}
 
 	public void setDef(int set) {
 		this.def = set;
+		this.doGodMode();
 	}
 
 	public void updateGold(int bGold) {
 		this.gold += bGold;
+		this.doGodMode();
 	}
 
 	public void attackPrompt() {
@@ -310,8 +333,14 @@ public class Character {
 			System.out.println(this.name + " heals " + this.inventory[w].getStat() + " health points");
 			this.heal(this.inventory[w].getStat());
 		} else if (this.inventory[w].function.equals("Damage")) {
-			System.out.println(this.name + " throws the " + this.inventory[w].getName() + " at the " + boss.getName() + ", doing some damage");
-			boss.takeDmg(this.inventory[w].getStat());
+			if(boss instanceof Mob && ((Mob) boss).getCount() > 1) {
+				System.out.println(this.name + " throws the " + this.inventory[2].getName() + " at the group of " + boss.getName()
+				+ ", doing some damage to all of them");
+				((Mob)boss).itemDmg(this.inventory[w].getStat());
+			} else {
+				System.out.println(this.name + " throws the " + this.inventory[w].getName() + " at the " + boss.getName() + ", doing some damage");
+				boss.takeDmg(this.inventory[w].getStat());
+			}
 		} else if (this.inventory[w].function.equals("buffAtk")) {
 			System.out.println(this.name + "'s attack rises by " + this.inventory[w].getStat());
 			this.updateAtk(this.inventory[2].getStat());
@@ -320,20 +349,30 @@ public class Character {
 			this.updateDef(this.inventory[w].getStat());
 		}
 	}
-
-	public void attackBoss(Boss boss) {
+	
+	public void attack(Boss enemy) {
 		this.attackPrompt();
 		if (prompt.getPChoice().equalsIgnoreCase("attack")) {
-			System.out.println(this.name + " attacks the " + boss.getName());
-			double gotHit = 2 * Math.random();
-			if (gotHit <= 1) {
-				System.out.println("The " + boss.getName() + " narrowly avoided the attack");
+			if(enemy instanceof Mob && ((Mob)enemy).getCount() > 1) {
+				System.out.println(this.name + " attacks the group of enemies");
 			} else {
-				System.out.println("the " + boss.getName() + " was hit by the attack");
-				boss.takeDmg(this.atk);
+				System.out.println(this.name + " attacks the " + enemy.getName());
+			}
+			double gotHit = 2 * Math.random();
+			if(this.godMode) {
+				gotHit += 1.1;
+			}
+			if (gotHit <= 1) {
+				System.out.println("The " + enemy.getName() + " narrowly avoided the attack");
+			} else {
+				System.out.println("the " + enemy.getName() + " was hit by the attack");
+				enemy.takeDmg(this.atk);
 			}
 		} else if (prompt.getPChoice().equalsIgnoreCase("run")) {
 			double gotHit = 6 * Math.random();
+			if(this.godMode) {
+				gotHit += 5.1;
+			}
 			if (gotHit <= 5) {
 				System.out.println(this.name + " failed to get away");
 			} else {
@@ -341,68 +380,10 @@ public class Character {
 				return;
 			}
 		} else if (prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
-			this.itemEffect(boss, 2);
+			this.itemEffect(enemy, 2);
 		} else {
-			this.itemEffect(boss, 3);
+			this.itemEffect(enemy, 3);
 		}
-	}
-
-	public void attackGroup(Enemy[] enemyList, Boolean[] whichGroupAlive, int[] aliveCount, int battle) {
-		this.attackPrompt();
-		for (int d = 0; d < battle; d++) {
-			if (whichGroupAlive[d]) {
-				this.whichAttacked = d;
-			}
-		}
-		if (prompt.getPChoice().equalsIgnoreCase("attack")) {
-			System.out.println(this.name + " attacks the group of enemies");
-			double gotHit = 2 * Math.random();
-			if (gotHit <= 1) {
-				System.out.println("The " + enemyList[this.whichAttacked].getName() + " narrowly avoided the attack");
-			} else {
-				System.out.println("the " + enemyList[this.whichAttacked].getName() + " was hit by the attack");
-				enemyList[this.whichAttacked].takeDmg(this.atk);
-			}
-		} else if (prompt.getPChoice().equalsIgnoreCase("run")) {
-			double gotHit = 6 * Math.random();
-			if (gotHit <= 5) {
-				System.out.println(this.name + " failed to get away");
-			} else {
-				System.out.println(this.name + " succesfully ran away");
-				return;
-			}
-		} else if (prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
-			System.out.println(this.name + " uses the " + this.inventory[2].getName());
-			if (this.inventory[2].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[2].getStat() + " health points");
-				this.heal(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[2].getName() + " at the group of " + enemyList[this.whichAttacked].getName()
-						+ ", doing some damage to all of them");
-				enemyList[whichAttacked].itemDmg(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[2].getStat());
-				this.updateAtk(this.inventory[2].getStat());
-			} else if (this.inventory[2].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[2].getStat());
-				this.updateDef(this.inventory[2].getStat());
-			}
-		} else {
-			System.out.println("You use the " + this.inventory[3].getName());
-			if (this.inventory[3].function.equals("Healing")) {
-				System.out.println(this.name + " heals " + this.inventory[3].getStat() + " health points");
-				this.heal(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("Damage")) {
-				System.out.println(this.name + " throws the " + this.inventory[3].getName() + " at the group of " + enemyList[whichAttacked].getName()
-						+ ", doing some damage to all of them");
-				enemyList[whichAttacked].itemDmg(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffAtk")) {
-				System.out.println(this.name + "'s attack rises by " + this.inventory[3].getStat());
-				this.updateAtk(this.inventory[3].getStat());
-			} else if (this.inventory[3].function.equals("buffDef")) {
-				System.out.println(this.name + "'s defense rises by " + this.inventory[3].getStat());
-				this.updateDef(this.inventory[3].getStat());
-			}
-		}
+		this.doGodMode();
 	}
 }

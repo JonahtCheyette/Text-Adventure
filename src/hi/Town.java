@@ -24,9 +24,9 @@ public class Town {
 
 	public void runTown(Equipment[] sellList, Boolean redo) {
 		this.sellList = new String[sellList.length + 2];
-		for (int i = 0; i < sellList.length; i++) {
-			if (sellList[i] != null) {
-				this.sellList[i] = sellList[i].getName();
+		for (int io = 0; io < sellList.length; io++) {
+			if (sellList[io] != null) {
+				this.sellList[io] = sellList[io].getName();
 			}
 		}
 		this.sellList[sellList.length] = "rest";
@@ -36,9 +36,9 @@ public class Town {
 					+ " walks into town and finds the nearest equipment shop, which also happens to be the town inn\n\"what can I get you?\" asks the shopkeeper.");
 			prompt.pause();
 		}
-		for (int l = 0; l < sellList.length; l++) {
-			if (sellList[l] != null) {
-				System.out.println("\n" + sellList[l].getName() + " it is " + sellList[l].price + " gold");
+		for (int ip = 0; ip < sellList.length; ip++) {
+			if (sellList[ip] != null) {
+				System.out.println("\n" + sellList[ip].getName() + " it is " + sellList[ip].price + " gold");
 			}
 		}
 		System.out.println("\nStay a night in the inn and rest\n\nLeave the town\n\n" + player.getName() + " has " + player.getGold() + " gold");
@@ -80,7 +80,7 @@ public class Town {
 				System.out.println(player.getName() + " decids to buy the " + sellList[this.choice].getName());
 				player.addItemToInvt(sellList[this.choice]);
 				player.updateGold(-1 * sellList[this.choice].price);
-				if(!player.getSlotFull()) {
+				if(!player.getItemInSlot()) {
 					prompt.pause();
 				}
 			}

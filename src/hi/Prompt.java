@@ -16,8 +16,8 @@ public class Prompt {
 	}
 
 	public void deathPrompt() {
-		player.Die();
-		System.out.println(player.getName() + " Died");
+		this.player.Die();
+		System.out.println(this.player.getName() + " Died");
 		this.pause();
 	}
 
