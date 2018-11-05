@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO: add a class system to the game, add exp and leveling (possibly tied to class), balance stuff
+ * TODO:(in order of priority)make prompt methods static, add a class system to the game, add exp and leveling (possibly tied to class), balance stuff
  *
  */
 
