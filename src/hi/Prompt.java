@@ -21,12 +21,12 @@ public class Prompt {
 		this.pause();
 	}
 
-	public void pause() {
+	public static void pause() {
 		System.out.println("(Enter anything to continue)");
 		this.playerChoice = input.nextLine();
 	}
 
-	public void yesNo(String... text) {
+	public static void yesNo(String... text) {
 		while (!this.checkChoice) {
 			if(text.length == 0) {
 				System.out.println("(yes/no)");
@@ -58,7 +58,7 @@ public class Prompt {
 		this.checkChoice = false;
 	}
 	
-	public void usePrompt(String[]... choices) {
+	public static void usePrompt(String[]... choices) {
 		this.dDisplay = choices.length - 1;
 		if (choices.length > 2) {
 			System.out.println("too many arguments passed to usePrompt");
@@ -79,7 +79,7 @@ public class Prompt {
 			for (int in = 0; in < choices[0].length; in++) {
 				if (choices[0][in] != null) {
 					if (this.playerChoice.equalsIgnoreCase(choices[0][in])) {
-						this.choice = in;
+						choice = in;
 						this.checkChoice = true;
 					}
 				}
@@ -95,8 +95,8 @@ public class Prompt {
 		this.checkChoice = false;
 	}
 	
-	public int getChoice() {
-		return this.choice;
+	public static int getChoice() {
+		return choice;
 	}
 
 	public String getPChoice() {
