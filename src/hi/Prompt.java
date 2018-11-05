@@ -8,7 +8,7 @@ public class Prompt {
 	String playerChoice;
 	Boolean checkChoice = false;
 	Boolean town = false;
-	Character player = GameWorld.player();
+	Character player;
 	Scanner input = new Scanner(System.in);
 
 	Prompt(Character player) {
