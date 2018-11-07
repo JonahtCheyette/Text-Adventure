@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority)add a class system to the game (possibly tied to exp or vice versa), add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority)add a class system to the game (possibly tied to exp or vice versa) by making subclasses of an object inside an array and keeping a int to keep track of which one is being used, add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
