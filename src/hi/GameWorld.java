@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority) add a class system to the game, add exp and leveling (possibly tied to class), add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority) add exp and leveling, add a class system to the game (possibly tied to exp or vice versa), add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
