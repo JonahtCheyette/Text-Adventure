@@ -3,36 +3,40 @@ package hi;
 import java.util.Scanner;
 
 public class Prompt {
-	int choice;
-	int dDisplay;
-	String playerChoice;
-	Boolean checkChoice = false;
-	Boolean town = false;
-	Character player;
-	Scanner input = new Scanner(System.in);
+	static int choice;
+	static int dDisplay;
+	static String playerChoice;
+	static Boolean checkChoice = false;
+	static Scanner input = new Scanner(System.in);
+	static Character player = GameWorld.getPlayer();
 
-	Prompt(Character player) {
-		this.player = player;
+	Prompt(){
+		
+	}
+	
+	public static void setPName() {
+		System.out.println("Please type character name");
+		player.setName(input.nextLine());
+	}
+	
+	public static void deathPrompt(Equipment equipment) {
+		player.Die(equipment);
+		System.out.println(player.getName() + " Died");
+		Prompt.pause();
 	}
 
-	public void deathPrompt() {
-		this.player.Die();
-		System.out.println(this.player.getName() + " Died");
-		this.pause();
-	}
-
-	public void pause() {
+	public static void pause() {
 		System.out.println("(Enter anything to continue)");
-		this.playerChoice = input.nextLine();
+		playerChoice = input.nextLine();
 	}
 
-	public void yesNo(String... text) {
-		while (!this.checkChoice) {
+	public static void yesNo(String... text) {
+		while (!checkChoice) {
 			if(text.length == 0) {
 				System.out.println("(yes/no)");
-				this.playerChoice = input.nextLine();
-				if (this.playerChoice.equalsIgnoreCase("yes") || this.playerChoice.equalsIgnoreCase("no")) {
-					this.checkChoice = true;
+				playerChoice = input.nextLine();
+				if (Prompt.checkPChoice(checkChoice,"yes","no")) {
+					checkChoice = true;
 				}
 			} else {
 				System.out.print(text[text.length-1] + " (");
@@ -44,66 +48,85 @@ public class Prompt {
 					}
 				}
 				System.out.print(")\n");
-				this.playerChoice = input.nextLine();
+				playerChoice = input.nextLine();
 				for(int il = 0; il < text.length-1; il++) {
-					if (this.playerChoice.equalsIgnoreCase(text[il])) {
-						this.checkChoice = true;
+					if (Prompt.checkPChoice(checkChoice,text[il])) {
+						checkChoice = true;
 					}
 				}
 			}
-			if (!this.checkChoice) {
+			if (!checkChoice) {
 				System.out.println("Please enter a valid choice");
 			}
 		}
-		this.checkChoice = false;
+		checkChoice = false;
 	}
 	
-	public void usePrompt(String[]... choices) {
-		this.dDisplay = choices.length - 1;
+	public static void usePrompt(Character player,String[]... choices) {
 		if (choices.length > 2) {
 			System.out.println("too many arguments passed to usePrompt");
 		}
-		while (!this.checkChoice) {
-			System.out.print("What will " + this.player.getName() + " do? (");
-			for (int im = 0; im < choices[this.dDisplay].length; im++) {
-				if (choices[this.dDisplay][im] != null) {
+		while (!checkChoice) {
+			System.out.print("What will " + player.getName() + " do? (");
+			for (int im = 0; im < choices[dDisplay].length; im++) {
+				if (choices[dDisplay][im] != null) {
 					if (im != 0) {
-						System.out.print("/" + choices[this.dDisplay][im]);
+						System.out.print("/" + choices[dDisplay][im]);
 					} else {
-						System.out.print(choices[this.dDisplay][im]);
+						System.out.print(choices[dDisplay][im]);
 					}
 				}
 			}
 			System.out.print(")\n");
-			this.playerChoice = input.nextLine();
+			playerChoice = input.nextLine();
 			for (int in = 0; in < choices[0].length; in++) {
 				if (choices[0][in] != null) {
-					if (this.playerChoice.equalsIgnoreCase(choices[0][in])) {
+					if (Prompt.checkPChoice(checkChoice,choices[0][in])) {
 						choice = in;
-						this.checkChoice = true;
+						checkChoice = true;
 					}
 				}
 			}
-			if (!this.checkChoice) {
-				if (playerChoice.equalsIgnoreCase("s")) {
+			if (!checkChoice) {
+				if (Prompt.checkPChoice(checkChoice,"s")) {
 					player.checkStatus();
 				} else {
 					System.out.println("Please enter a valid choice");
 				}
 			}
 		}
-		this.checkChoice = false;
+		checkChoice = false;
 	}
 	
-	public int getChoice() {
+	public static int getChoice() {
 		return choice;
 	}
 
-	public String getPChoice() {
-		return this.playerChoice;
+	public static String getPChoice() {
+		return playerChoice;
 	}
 
-	public void setChoice(String s) {
-		this.playerChoice = s;
+	public static void setChoice(String s) {
+		playerChoice = s;
+	}
+	
+	public static Boolean checkPChoice(Boolean checkState, String... choices) {
+		checkChoice = false;
+		for(int i = 0; i < choices.length; i++) {
+			if(playerChoice.equalsIgnoreCase(choices[i])) {
+				checkChoice = true;
+			}
+		}
+		if(checkChoice) {
+			if(!checkState) {
+				checkChoice = false;
+			}
+			return true;
+		} else {
+			if(checkState) {
+				checkChoice = true;
+			}
+			return false;
+		}
 	}
 }

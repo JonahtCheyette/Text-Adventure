@@ -6,19 +6,14 @@ public class Forest {
 	Boolean spiderKilled = false;
 	Boolean trollKilled = false;
 	Scanner input = new Scanner(System.in);
-	Character player;
+	Character player = GameWorld.getPlayer();
 	Boss[] bossList;
 	Mob[][] enemyList;
 	String[] choices = new String[3];
-	Battle battle;
-	Prompt prompt;
 
-	Forest(Character player, Boss[] bossList, Mob[][] enemyList, Battle battle) {
-		this.player = player;
-		this.battle = battle;
+	Forest(Boss[] bossList, Mob[][] enemyList) {
 		this.bossList = bossList;
 		this.enemyList = enemyList;
-		this.prompt = new Prompt(player);
 	}
 
 	public Boolean forestComplete() {
@@ -44,10 +39,10 @@ public class Forest {
 				+ " goes into the forest and come across a fork in the road\nOne path runs along a river till it gets to a bridge, and the other leads into a shady part of the forest.");
 		choices[0] = "bridge";
 		choices[1] = "deep";
-		prompt.usePrompt(this.choices);
-		if (prompt.getPChoice().equals("bridge")) {
-			this.battle.encounters(this.player, this.enemyList[0], "forest");
-			if (player.getHealth() <= 0 || battle.prompt.getPChoice().equalsIgnoreCase("run") || battle.prompt.getPChoice().equalsIgnoreCase("stop")) {
+		Prompt.usePrompt(this.player,this.choices);
+		if (Prompt.checkPChoice(false,"bridge")) {
+			Battle.encounters(this.enemyList[0], "forest");
+			if (player.getHealth() <= 0 || Prompt.checkPChoice(false,"run", "stop")) {
 				return;
 			}
 			System.out.println(player.getName()
@@ -56,19 +51,19 @@ public class Forest {
 			choices[0] = "pay";
 			choices[1] = "attack";
 			choices[2] = "run";
-			prompt.usePrompt(this.choices);
-			if (prompt.getPChoice().equalsIgnoreCase("pay")) {
+			Prompt.usePrompt(this.player,this.choices);
+			if (Prompt.checkPChoice(false,"pay")) {
 				System.out.println(player.getName() + " pays the troll 90 gold and he lets you cross");
 				if (player.gold < 90) {
 					System.out.println(player.getName() + " does not have enough money and the troll attacks them for wasting his time");
-					this.battle.bossBattle(player, this.bossList[0]);
+					Battle.bossBattle(this.bossList[0]);
 				} else {
 					System.out.println(player.getName() + " pays the troll and he lets you pass");
 					player.updateGold(-90);
 				}
-			} else if (prompt.getPChoice().equalsIgnoreCase("attack")) {
+			} else if (Prompt.checkPChoice(false,"attack")) {
 				System.out.println(player.getName() + " decides to attack the troll");
-				this.battle.bossBattle(player, this.bossList[0]);
+				Battle.bossBattle(this.bossList[0]);
 				if (player.health <= 0) {
 					return;
 				} else {
@@ -79,14 +74,14 @@ public class Forest {
 				return;
 			}
 		} else {
-			this.battle.encounters(this.player, this.enemyList[1], "forest");
-			if (player.getHealth() <= 0 || battle.prompt.getPChoice().equalsIgnoreCase("run") || battle.prompt.getPChoice().equalsIgnoreCase("stop")) {
+			Battle.encounters(this.enemyList[1], "forest");
+			if (player.getHealth() <= 0 || Prompt.checkPChoice(false,"run", "stop")) {
 				return;
 			}
 			System.out.println(player.getName() + " goes deeper into the woods, and notices that the spiders are becoming more plentiful the deeper they go\n"
 					+ player.getName() + "ends up in a clearing, with a giant spider in front of them hanging from a spiderweb.");
-			this.prompt.pause();
-			battle.bossBattle(player, this.bossList[1]);
+			Prompt.pause();
+			Battle.bossBattle(this.bossList[1]);
 			spiderKilled = true;
 		}
 	}

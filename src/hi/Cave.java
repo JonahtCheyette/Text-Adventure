@@ -8,22 +8,17 @@ public class Cave {
 	Boolean caveDragonKilled = false;
 	Boolean gameWon = false;
 	Scanner input = new Scanner(System.in);
-	Character player;
+	Character player = GameWorld.getPlayer();
 	Boss caveDragon;
 	Boss finalBoss;
 	Boss[] bossList = new Boss[1];
-	Battle battle;
 	Mob[] enemyList = new Mob[5];
-	Prompt prompt;
 
-	Cave(Character player, Boss[] bossList, Mob[] enemyList, Boss finalBoss, Battle battle) {
-		this.player = player;
+	Cave(Boss[] bossList, Mob[] enemyList, Boss finalBoss) {
 		this.bossList = bossList;
 		this.enemyList = enemyList;
 		this.finalBoss = finalBoss;
-		this.battle = battle;
 		this.open = false;
-		this.prompt = new Prompt(player);
 	}
 
 	public Boolean caveComplete() {
@@ -58,8 +53,8 @@ public class Cave {
 		for (int a = 0; a < this.enemyList.length; a++) {
 			this.enemyList[a].reset();
 		}
-		battle.encounters(player, this.enemyList, "cave");
-		if (player.getHealth() <= 0 || battle.prompt.getPChoice().equalsIgnoreCase("run") || battle.prompt.getPChoice().equalsIgnoreCase("stop")) {
+		Battle.encounters(this.enemyList, "cave");
+		if (player.getHealth() <= 0 || Prompt.checkPChoice(false,"run","stop")) {
 			return;
 		}
 		if (this.open) {
@@ -67,12 +62,12 @@ public class Cave {
 					.println(player.getName() + " decides to go into the cave. To their right is a giant door\nyou can either go into the door, or go farther in.");
 			choices[0] = "door";
 			choices[1] = "farther";
-			prompt.usePrompt(this.choices);
-			if (prompt.getPChoice().equalsIgnoreCase("door")) {
+			Prompt.usePrompt(player,this.choices);
+			if (Prompt.getPChoice().equalsIgnoreCase("door")) {
 				System.out.println(player.getName()
 						+ " decides to go through the door, and ends up in a giant cavern full of jade\n directly ahead of them is a sleeping dragon covered in jade cyrstals\nas they walk forwards the dragon raises it's head and roars!");
-				this.prompt.pause();
-				this.battle.bossBattle(this.player, this.finalBoss);
+				Prompt.pause();
+				Battle.bossBattle(this.finalBoss);
 				if (this.player.getHealth() <= 0) {
 					return;
 				} else {
@@ -81,19 +76,17 @@ public class Cave {
 					return;
 				}
 			}
-		}
-		if (!this.open) {
-			System.out.println(player.getName()
-					+ " decides to go into the cave. To their right is a giant closed door with a picture of a spider, dragon, and troll on it\nafter walking past this oddity, you come across a sleeping dragon. \nyou can either decide to sneak away or attack");
-		} else {
 			System.out.println(player.getName()
 					+ " decides to go deeper into the cave. As you walk farther in, the air becomes dryer, and it begins to get darker\nafter a while, they come across a sleeping dragon. \nyou can either decide to sneak away or attack");
+		} else {
+			System.out.println(player.getName()
+					+ " decides to go into the cave. To their right is a giant closed door with a picture of a spider, dragon, and troll on it\nafter walking past this oddity, you come across a sleeping dragon. \nyou can either decide to sneak away or attack");
 		}
 		System.out.println(player.getName() + " can either sneak away or attack.");
 		choices[0] = "sneak";
 		choices[1] = "attack";
-		prompt.usePrompt(this.choices);
-		if (prompt.getPChoice().equalsIgnoreCase("sneak")) {
+		Prompt.usePrompt(player,choices);
+		if (Prompt.checkPChoice(false,"sneak")) {
 			if (Math.random() > 0.5) {
 				System.out.println(
 						"as " + player.getName() + " is sneaking away they accidentally knock a pebble that rolls and hits the dragon.\nit wakes up and eyes "
@@ -102,12 +95,12 @@ public class Cave {
 				return;
 			}
 		}
-		if (prompt.getPChoice().equalsIgnoreCase("attack")) {
+		if (Prompt.checkPChoice(false,"attack")) {
 			System.out.println("you attack the dragon and deal 50 damage");
 			this.bossList[0].takeDmg(50);
 		}
-		this.prompt.pause();
-		this.battle.bossBattle(this.player, this.bossList[0]);
+		Prompt.pause();
+		Battle.bossBattle(this.bossList[0]);
 		this.caveDragonKilled = true;
 	}
 }

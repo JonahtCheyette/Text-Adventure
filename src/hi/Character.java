@@ -19,20 +19,16 @@ public class Character {
 			"Weapon", "Armor", "Item 1", "Item 2", "Passive Item"
 	};
 	Boolean itemInSlot;
-	Equipment equipment;
+	Boolean checkRan = false;
 	Boolean check = false;
 	Equipment[] inventory = new Equipment[5];
 	Scanner input = new Scanner(System.in);
-	Prompt prompt = new Prompt(this);
 
-	Character(Equipment equipment) {
+	Character() {
 		for (int b = 1; b < 4; b++) {
 			this.inventory[b] = null;
 		}
-		this.inventory[0] = equipment;
-		this.atk = equipment.getStat();
-		this.iNames[0] = equipment.getName();
-		this.equipment = equipment;
+		this.atk = 0;
 		this.iNames[5] = "exit";
 		this.doGodMode();
 	}
@@ -93,6 +89,10 @@ public class Character {
 		return this.itemInSlot;
 	}
 	
+	public Boolean getCheckRan() {
+		return this.checkRan;
+	}
+	
 	public void doGodMode() {
 		if(this.godMode) {
 			this.atk = 1000000;
@@ -128,13 +128,13 @@ public class Character {
 		this.display[1] = "type an item's name to get that item's info";
 		this.check = false;
 		while(!this.check) {
-			this.prompt.usePrompt(this.iNames, this.display);
+			Prompt.usePrompt(this,this.iNames, this.display);
 			for(int d = 0; d < this.inventory.length; d++) {
-				if(this.prompt.getPChoice().equalsIgnoreCase(this.choices[d+4])) {
+				if(Prompt.checkPChoice(false,this.choices[d+4])) {
 					System.out.println(this.inventory[d].getText());
 				}
 			}
-			if(this.prompt.getPChoice().equalsIgnoreCase("exit")) {
+			if(Prompt.checkPChoice(false,"exit")) {
 				this.check = true;
 			}
 		}
@@ -156,7 +156,7 @@ public class Character {
 		this.doGodMode();
 	}
 
-	public void Die() {
+	public void Die(Equipment equipment) {
 		this.health = 100;
 		this.gold = 250;
 		this.exp = 0;
@@ -164,7 +164,7 @@ public class Character {
 		for (int f = 0; f < this.inventory.length; f++) {
 			this.inventory[f] = null;
 		}
-		this.inventory[0] = this.equipment;
+		this.inventory[0] = equipment;
 	}
 
 	public void takeDmg(int Dmg) {
@@ -187,7 +187,7 @@ public class Character {
 				this.def = Equipment.getStat();
 			}
 		} else if (Equipment.isItem()) {
-			if (Equipment.getFunction().equalsIgnoreCase("passive")) {
+			if (Equipment.isPassive()) {
 				if(this.inventory[4] != null) {
 					this.itemInSlot = true;
 					this.fullIvnt = this.inventory[4].getName();
@@ -220,17 +220,17 @@ public class Character {
 		if (this.itemInSlot) {
 			if (Equipment.isItem() && !(Equipment.isPassive())) {
 				System.out.println("you already have a " + this.fullIvnt + ". Replace one?");
-				this.prompt.yesNo();
-				if(this.prompt.getPChoice().equalsIgnoreCase("yes")) {
+				Prompt.yesNo();
+				if(Prompt.getPChoice().equalsIgnoreCase("yes")) {
 					this.display[0] = this.inventory[2].getName();
 					this.display[1] = this.inventory[3].getName();
-					this.prompt.yesNo(this.display[0], this.display[1], "Which one?");
+					Prompt.yesNo(this.display[0], this.display[1], "Which one?");
 				}
 			} else {
 				System.out.println("you already have a " + this.fullIvnt + ". Replace it?");
-				this.prompt.yesNo();
+				Prompt.yesNo();
 			}
-			if(prompt.getPChoice().equalsIgnoreCase("yes")) {
+			if(Prompt.checkPChoice(false,"yes")) {
 				if (Equipment.isArmor()) {
 					this.inventory[1] = Equipment;
 					this.iNames[1] = Equipment.getName();
@@ -245,13 +245,13 @@ public class Character {
 				}
 			}
 			if(this.inventory[2] != null) {
-				if (this.prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
+				if (Prompt.checkPChoice(false,this.inventory[2].getName())) {
 					this.inventory[2] = Equipment;
 					this.iNames[2] = Equipment.getName();
 				}
 			}
 			if(this.inventory[3] != null) {
-				if(this.prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
+				if(Prompt.checkPChoice(false,this.inventory[2].getName())) {
 					this.inventory[3] = Equipment;
 					this.iNames[3] = Equipment.getName();
 				}
@@ -306,7 +306,7 @@ public class Character {
 			this.choices[1] = "run";
 			this.choices[2] = null;
 			this.choices[3] = null;
-			prompt.usePrompt(this.choices);
+			Prompt.usePrompt(this,this.choices);
 		} else {
 			if (this.inventory[3] == null) {
 				System.out.println(this.name + " can attack, run away, or use their " + this.inventory[2].getName());
@@ -314,7 +314,7 @@ public class Character {
 				this.choices[1] = "run";
 				this.choices[2] = this.inventory[2].getName();
 				this.choices[3] = null;
-				prompt.usePrompt(this.choices);
+				Prompt.usePrompt(this,this.choices);
 			} else {
 				System.out.println(
 						this.name + " can attack, run away, use their " + this.inventory[2].getName() + ", or they can use their " + this.inventory[3].getName());
@@ -322,7 +322,7 @@ public class Character {
 				this.choices[1] = "run";
 				this.choices[2] = this.inventory[2].getName();
 				this.choices[3] = this.inventory[3].getName();
-				prompt.usePrompt(this.choices);
+				Prompt.usePrompt(this,this.choices);
 			}
 		}
 	}
@@ -351,8 +351,9 @@ public class Character {
 	}
 	
 	public void attack(Boss enemy) {
+		this.checkRan = false;
 		this.attackPrompt();
-		if (prompt.getPChoice().equalsIgnoreCase("attack")) {
+		if (Prompt.checkPChoice(false,"attack")) {
 			if(enemy instanceof Mob && ((Mob)enemy).getCount() > 1) {
 				System.out.println(this.name + " attacks the group of enemies");
 			} else {
@@ -368,7 +369,7 @@ public class Character {
 				System.out.println("the " + enemy.getName() + " was hit by the attack");
 				enemy.takeDmg(this.atk);
 			}
-		} else if (prompt.getPChoice().equalsIgnoreCase("run")) {
+		} else if (Prompt.checkPChoice(false,"run")) {
 			double gotHit = 6 * Math.random();
 			if(this.godMode) {
 				gotHit += 5.1;
@@ -376,10 +377,11 @@ public class Character {
 			if (gotHit <= 5) {
 				System.out.println(this.name + " failed to get away");
 			} else {
+				this.checkRan = true;
 				System.out.println(this.name + " successfully ran away");
 				return;
 			}
-		} else if (prompt.getPChoice().equalsIgnoreCase(this.inventory[2].getName())) {
+		} else if (Prompt.checkPChoice(false,this.inventory[2].getName())) {
 			this.itemEffect(enemy, 2);
 		} else {
 			this.itemEffect(enemy, 3);

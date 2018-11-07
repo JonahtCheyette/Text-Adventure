@@ -1,15 +1,20 @@
 package hi;
 
-import java.util.Scanner;
 import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority) make prompt and battle methods static, add a setting name function to Prompt for the player, add a class system to the game, add exp and leveling (possibly tied to class), add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority) add a class system to the game, add exp and leveling (possibly tied to class), add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
 public class GameWorld {
+	static Character player = new Character();
+	
+	public static Character getPlayer() {
+		return player;
+	}
+	
 	public static void main(String[] args) {
 		int makeSure;
 		Boolean wentToTown = false;
@@ -66,18 +71,14 @@ public class GameWorld {
 		Boss giantSpider = new Boss("Giant Spider", "Tarantula", 90, 45, 90, 50);
 		Boss[] caveBosses = new Boss[] { caveDragon };
 		Boss[] forestBosses = new Boss[] { bridgeTroll, giantSpider };
-		Character player = new Character(woodSword);
-		Scanner input = new Scanner(System.in);
-		Battle battle = new Battle();
-		Prompt prompt = new Prompt(player);
-		Cave startCave = new Cave(player, caveBosses, caveEnemies, jadeDragon, battle);
-		Forest startForest = new Forest(player, forestBosses, forestEnemies, battle);
-		Town startTown = new Town(player, eclipse, battle);
+		Cave startCave = new Cave(caveBosses, caveEnemies, jadeDragon);
+		Forest startForest = new Forest(forestBosses, forestEnemies);
+		Town startTown = new Town(eclipse);
 		System.out.println("ADVICE: YOU CAN ENTER \"s\" AT ANY TIME TO VIEW YOUR STATUS AND INVENTORY");
+		player.addItemToInvt(woodSword);
 		while (true) {
 			if (gameStart) {
-				System.out.println("Please type character name");
-				player.setName(input.nextLine());
+				Prompt.setPName();
 				gameStart = false;
 			}
 			if (startCave.caveComplete() && startForest.forestComplete()) {
@@ -97,14 +98,14 @@ public class GameWorld {
 			}
 			System.out.println(player.getName()
 					+ " is at a crossroads. There is a path that leads to a cave, another that leads to a forest, \nand one more that leads into a town.");
-			prompt.usePrompt(choices);
-			if (prompt.playerChoice.equalsIgnoreCase("cave")) {
+			Prompt.usePrompt(player,choices);
+			if (Prompt.checkPChoice(false,"cave")) {
 				wentToTown = false;
 				startCave.runCave();
-			} else if (prompt.playerChoice.equalsIgnoreCase("forest")) {
+			} else if (Prompt.checkPChoice(false,"forest")) {
 				wentToTown = false;
 				startForest.runForest();
-			} else if (prompt.playerChoice.equalsIgnoreCase("town")) {
+			} else if (Prompt.checkPChoice(false,"town")) {
 				if (wentToTown) {
 					startTown.runTown(sellList, true);
 				} else {
@@ -114,7 +115,7 @@ public class GameWorld {
 			}
 			if (player.health <= 0) {
 				startCave.playerDied();
-				prompt.deathPrompt();
+				Prompt.deathPrompt(woodSword);
 				gameStart = true;
 			} else if (startCave.gameFinished()) {
 				return;
