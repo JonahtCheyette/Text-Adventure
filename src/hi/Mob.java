@@ -4,6 +4,8 @@ public class Mob extends Boss{
 	int whichDmg;
 	int rangeMax;
 	int rangeMin;
+	int expMax;
+	int expMin;
 	int attacked = 0;
 	int summoned = 0;
 	int whiffed = 0;
@@ -13,8 +15,8 @@ public class Mob extends Boss{
 	int[] minions;
 	Boolean damageTookCheck = false;
 
-	Mob(String name, String mName, int health, int atk, int rangeMin, int rangeMax, int minionHealth, int goldMax) {
-		super(name, mName, health, atk, goldMax, minionHealth);
+	Mob(String name, String mName, int health, int atk, int rangeMin, int rangeMax, int minionHealth, int goldMax, int expMax, int expMin) {
+		super(name, mName, health, atk, goldMax, minionHealth, expMax, expMin);
 		this.rangeMin = rangeMin;
 		this.rangeMax = rangeMax;
 		this.atk = new int[rangeMax];
@@ -91,11 +93,15 @@ public class Mob extends Boss{
 			}
 		}
 	}
-
+	
 	public int giveGold() {
 		return super.giveGold() * this.count;
 	}
 
+	public int calculateExp() {
+		return super.calculateExp() * this.count;
+	}
+	
 	public void reset() {
 		this.count = (rand.nextInt((this.rangeMax - this.rangeMin) + 1) + this.rangeMin);
 		for (int ii = this.rangeMin; ii < this.rangeMax; ii++) {

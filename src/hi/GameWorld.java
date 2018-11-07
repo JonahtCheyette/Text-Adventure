@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority) add exp and leveling, add a class system to the game (possibly tied to exp or vice versa), add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority)add a class system to the game (possibly tied to exp or vice versa), add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
@@ -46,29 +46,29 @@ public class GameWorld {
 				mHPotion, lHPotion, sDPotion, mDPotion, lDPotion, sABPotion, mABPotion, lABPotion, sDBPotion, mDBPotion, lDBPotion };
 		Equipment[] sellList = new Equipment[fullEList.length];
 		Equipment[] pastSellList = new Equipment[fullEList.length];
-		Mob slime = new Mob("Slime", "Mini Slime", 10, 5, 1, 2, 5, 20);
-		Mob golem = new Mob("Golem", null, 20, 5, 2, 2, 0, 15);
-		Mob orc = new Mob("Orc", "Underling", 30, 10, 2, 4, 10, 25);
-		Mob ghost = new Mob("Ghost", "Cursed Spirit", 25, 5, 0, 1, 25, 25);
-		Mob giantSnake = new Mob("Giant Snake", null, 40, 15, 1, 1, 0, 20);
-		Mob anaconda = new Mob("Anaconda", null, 10, 5, 1, 2, 0, 20);
-		Mob scorpion = new Mob("Scorpion", null, 2, 10, 2, 2, 0, 0);
-		Mob treant = new Mob("Treant", null, 20, 15, 1, 1, 0, 25);
-		Mob witchDoctor = new Mob("WitchDoctor", "Shaman", 10, 25, 1, 1, 8, 25);
-		Mob manEatingPlant = new Mob("Man Eating Plant", null, 15, 30, 1, 1, 0, 30);
-		Mob goblin = new Mob("Goblin", null, 5, 5, 1, 4, 0, 25);
-		Mob naiad = new Mob("Naiad", null, 2, 10, 2, 2, 0, 20);
-		Mob kappa = new Mob("Kappa", null, 15, 15, 1, 1, 0, 25);
-		Mob snappingTurtle = new Mob("SnappingTurtle", null, 20, 15, 0, 1, 0, 10);
-		Mob koiDragon = new Mob("Koi Dragon", "Koifish", 15, 30, 30, 1, 1, 0);
+		Mob slime = new Mob("Slime", "Mini Slime", 10, 5, 1, 2, 5, 20, 5, 0);
+		Mob golem = new Mob("Golem", null, 20, 5, 2, 2, 0, 15, 8, 6);
+		Mob orc = new Mob("Orc", "Underling", 30, 10, 2, 4, 10, 25, 15, 0);
+		Mob ghost = new Mob("Ghost", "Cursed Spirit", 25, 5, 0, 1, 25, 25, 25, 15);
+		Mob giantSnake = new Mob("Giant Snake", null, 40, 15, 1, 1, 0, 20, 40, 20);
+		Mob anaconda = new Mob("Anaconda", null, 10, 5, 1, 2, 0, 20, 3, 2);
+		Mob scorpion = new Mob("Scorpion", null, 2, 10, 2, 2, 0, 0, 10, 4);
+		Mob treant = new Mob("Treant", null, 20, 15, 1, 1, 0, 25, 20, 3);
+		Mob witchDoctor = new Mob("WitchDoctor", "Shaman", 10, 25, 1, 1, 8, 25, 20, 15);
+		Mob manEatingPlant = new Mob("Man Eating Plant", null, 15, 30, 1, 1, 0, 30, 35, 25);
+		Mob goblin = new Mob("Goblin", null, 5, 5, 1, 4, 0, 25, 4, 1);
+		Mob naiad = new Mob("Naiad", null, 2, 10, 2, 2, 0, 20, 9, 5);
+		Mob kappa = new Mob("Kappa", null, 15, 15, 1, 1, 0, 25, 12, 4);
+		Mob snappingTurtle = new Mob("SnappingTurtle", null, 20, 15, 0, 1, 0, 10, 25, 5);
+		Mob koiDragon = new Mob("Koi Dragon", "Koifish", 15, 30, 30, 1, 1, 0, 50, 10);
 		Mob[] caveEnemies = new Mob[] { slime, golem, orc, ghost, giantSnake };
 		Mob[][] forestEnemies = new Mob[][] { { goblin, naiad, kappa, snappingTurtle, koiDragon },
 				{ anaconda, scorpion, treant, witchDoctor, manEatingPlant } };
-		Boss caveDragon = new Boss("Cave Dragon", null, 250, 80, 100, 0);
-		Boss jadeDragon = new Boss("Jade Dragon", "Jade Lizard", 500, 120, 1000, 50);
-		Boss eclipse = new Boss("Eclipse", "java.lang.nullPointerExeption", 1000, 140, 2000, 50);
-		Boss bridgeTroll = new Boss("Bridge Troll", null, 130, 70, 300, 0);
-		Boss giantSpider = new Boss("Giant Spider", "Tarantula", 90, 45, 90, 50);
+		Boss caveDragon = new Boss("Cave Dragon", null, 250, 80, 0, 100, 150, 70);
+		Boss jadeDragon = new Boss("Jade Dragon", "Jade Lizard", 500, 120, 50, 1000, 500, 400);
+		Boss eclipse = new Boss("Eclipse", "java.lang.nullPointerExeption", 1000, 140, 50, 2000, 800, 700);
+		Boss bridgeTroll = new Boss("Bridge Troll", null, 130, 70, 0, 300, 125, 100);
+		Boss giantSpider = new Boss("Giant Spider", "Tarantula", 90, 45, 50, 90, 180, 50);
 		Boss[] caveBosses = new Boss[] { caveDragon };
 		Boss[] forestBosses = new Boss[] { bridgeTroll, giantSpider };
 		Cave startCave = new Cave(caveBosses, caveEnemies, jadeDragon);

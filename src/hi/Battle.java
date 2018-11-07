@@ -211,6 +211,7 @@ public class Battle {
 			if (!(player.getHealth() <= 0)) {
 				for (int t = 0; t < battle; t++) {
 					player.updateGold(enemyList[t].giveGold());
+					player.gainExp(enemyList[t].calculateExp(), battle);
 				}
 				itemUsed = false;
 				System.out.println(player.getName() + " won and gained gold! " + player.getName() + " now has " + player.getGold() + " pieces of gold. "
@@ -261,6 +262,7 @@ public class Battle {
 		player.setAtk(playerAtkInit);
 		if (!(player.getHealth() <= 0)) {
 			player.updateGold(enemy.giveGold());
+			player.gainExp(enemy.calculateExp(), 1);
 			itemUsed = false;
 			System.out.println("You won and gained gold! you now have " + player.getGold() + " pieces of gold. You now have " + player.getHealth() + " health");
 		}

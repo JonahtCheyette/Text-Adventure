@@ -10,6 +10,8 @@ public class Boss {
 	int goldMax;
 	int minionHealth;
 	int damageTook;
+	int expMax;
+	int expMin;
 	int minions = 0;
 	int cMinions = 0;
 	int[] pMHealth = new int[15];
@@ -17,13 +19,15 @@ public class Boss {
 	String mName;
 	Random rand = new Random();
 
-	Boss(String name, String mName, int health, int atk, int goldMax, int minionHealth) {
+	Boss(String name, String mName, int health, int atk, int minionHealth, int goldMax, int expMax, int expMin) {
 		this.health = health;
 		this.startHealth = health;
 		this.atk = atk;
 		this.startAtk = atk;
 		this.goldMax = goldMax;
 		this.minionHealth = minionHealth;
+		this.expMax = expMax;
+		this.expMin = expMin;
 		this.name = name;
 		this.mName = mName;
 		for (int w = 0; w < this.pMHealth.length; w++) {
@@ -55,6 +59,10 @@ public class Boss {
 		return this.mName;
 	}
 
+	public int calculateExp() {
+		return rand.nextInt(this.expMax + 1 - this.expMin) + this.expMin;
+	}
+	
 	public void takeDmg(int Dmg) {
 		this.cMinions = this.minions;
 		this.damageTook = Dmg;

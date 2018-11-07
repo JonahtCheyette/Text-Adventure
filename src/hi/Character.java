@@ -6,6 +6,10 @@ public class Character {
 	Boolean godMode = false;
 	int def;
 	int atk;
+	int oldExp;
+	int oldLv;
+	int lvStatChange = 0;
+	int mExpTracker = 0;
 	int exp = 0;
 	int lv = 1;
 	int health = 100;
@@ -184,7 +188,7 @@ public class Character {
 			} else {
 				this.inventory[1] = Equipment;
 				this.iNames[1] = Equipment.getName();
-				this.def = Equipment.getStat();
+				this.def = Equipment.getStat() + this.lvStatChange;
 			}
 		} else if (Equipment.isItem()) {
 			if (Equipment.isPassive()) {
@@ -214,7 +218,7 @@ public class Character {
 			} else {
 				this.inventory[0] = Equipment;
 				this.iNames[0] = Equipment.getName();
-				this.atk = Equipment.getStat();
+				this.atk = Equipment.getStat() + this.lvStatChange;
 			}
 		}
 		if (this.itemInSlot) {
@@ -234,14 +238,14 @@ public class Character {
 				if (Equipment.isArmor()) {
 					this.inventory[1] = Equipment;
 					this.iNames[1] = Equipment.getName();
-					this.def = Equipment.getStat();
+					this.def = Equipment.getStat() + this.lvStatChange;
 				} else if (Equipment.isPassive()) {
 					this.inventory[4] = Equipment;
 					this.iNames[4] = Equipment.getName();
 				} else {
 					this.inventory[0] = Equipment;
 					this.iNames[0] = Equipment.getName();
-					this.atk = Equipment.getStat();
+					this.atk = Equipment.getStat() + this.lvStatChange;
 				}
 			}
 			if(this.inventory[2] != null) {
@@ -296,6 +300,24 @@ public class Character {
 	public void updateGold(int bGold) {
 		this.gold += bGold;
 		this.doGodMode();
+	}
+	
+	public void gainExp(int gain, int numOfTimes) {
+		if(this.mExpTracker == 0) {
+			this.oldLv = this.lv;
+			this.oldExp = this.exp;
+		}
+		this.mExpTracker ++;
+		this.exp += gain;
+		this.lv = (int) (1.5 * Math.sqrt(this.exp));
+		if(this.mExpTracker == numOfTimes) {
+			this.lvStatChange = (this.lv * 2) - 2;
+			System.out.println("You have gained " + (this.exp - this.oldExp) + " Exp. Your level is now " + this.lv);
+			this.updateAtk((this.lv - this.oldLv) * 2);
+			this.updateDef((this.lv - this.oldLv) * 2);
+			System.out.println("your Atk is now " + this.atk + "\nyour Def is now " + this.def);
+			this.mExpTracker = 0;
+		}
 	}
 
 	public void attackPrompt() {
