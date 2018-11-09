@@ -19,7 +19,7 @@ public class Battle {
 	static Boolean[] whichGroupAlive = new Boolean[5];
 	static Scanner input = new Scanner(System.in);
 	static Random rand = new Random();
-	static Character player = GameWorld.getPlayer();
+	static Adventurer player = GameWorld.getPlayer();
 
 	Battle(){
 		

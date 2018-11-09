@@ -6,7 +6,7 @@ public class Forest {
 	Boolean spiderKilled = false;
 	Boolean trollKilled = false;
 	Scanner input = new Scanner(System.in);
-	Character player = GameWorld.getPlayer();
+	Adventurer player = GameWorld.getPlayer();
 	Boss[] bossList;
 	Mob[][] enemyList;
 	String[] choices = new String[3];

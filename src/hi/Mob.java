@@ -120,7 +120,7 @@ public class Mob extends Boss{
 		}
 	}
 
-	public void attack(int which, Character player) {
+	public void attack(int which, Adventurer player) {
 		if (this.minionHealth > 0) {
 			int gotHit = rand.nextInt(30);
 			if (gotHit < 10) {

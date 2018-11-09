@@ -1,6 +1,6 @@
 package hi;
 
-public class Warrior extends Character{
+public class Warrior extends Adventurer{
 	Warrior(String name,int health, int exp, int lv, int gold, Equipment[] inventory){
 		super(name, health, exp, lv, gold, inventory);
 	}

@@ -4,29 +4,29 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority)add a class system to the game (possibly tied to exp or vice versa) by making subclasses of an object inside an array and keeping a int to keep track of which one is being used, add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority)add a multiline command for shopping, balance stuff, magic, statuses.
  *
  */
 
 public class GameWorld {
-	static Character[] player = new Character[] {new Character(), new Warrior(), new Druid()};
+	static Adventurer[] player = new Adventurer[] {new Adventurer(), new Warrior(), new Druid()};
 	static int whichClass = 0;
 	
-	public static Character getPlayer() {
-		return player[whichClass];
-	}
-	
-	public static void setPlayer(Character newPlayer) {
-		if(newPlayer instanceof Druid) {
-			player[2] = newPlayer;
-			whichClass = 2;
-		} else if(newPlayer instanceof Warrior) {
-			player[1] = newPlayer;
+	public static void setPlayer(String toWhat) {
+		if(toWhat.equalsIgnoreCase("Warrior")) {
+			player[1] = new Warrior(player[whichClass].getName(),player[whichClass].getHealth(), player[whichClass].getExp(), player[whichClass].getLV(), player[whichClass].getGold(), player[whichClass].getInventory());
 			whichClass = 1;
+		} else if(toWhat.equalsIgnoreCase("Druid")) {
+			player[2] = new Druid(player[whichClass].getName(),player[whichClass].getHealth(), player[whichClass].getExp(), player[whichClass].getLV(), player[whichClass].getGold(), player[whichClass].getInventory());
+			whichClass = 2;
 		} else {
-			player[0] = newPlayer;
+			player[0] = new Adventurer(player[whichClass].getName(),player[whichClass].getHealth(), player[whichClass].getExp(), player[whichClass].getLV(), player[whichClass].getGold(), player[whichClass].getInventory());
 			whichClass = 0;
 		}
+	}
+	
+	public static Adventurer getPlayer() {
+		return player[whichClass];
 	}
 	
 	public static void main(String[] args) {

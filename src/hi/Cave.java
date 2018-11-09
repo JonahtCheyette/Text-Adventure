@@ -8,7 +8,7 @@ public class Cave {
 	Boolean caveDragonKilled = false;
 	Boolean gameWon = false;
 	Scanner input = new Scanner(System.in);
-	Character player = GameWorld.getPlayer();
+	Adventurer player = GameWorld.getPlayer();
 	Boss caveDragon;
 	Boss finalBoss;
 	Boss[] bossList = new Boss[1];

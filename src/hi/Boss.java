@@ -104,7 +104,7 @@ public class Boss {
 		this.minions = 0;
 	}
 
-	public void attack(Character player) {
+	public void attack(Adventurer player) {
 		if (this.minionHealth > 0) {
 			int gotHit = rand.nextInt(30);
 			if (gotHit < 10) {

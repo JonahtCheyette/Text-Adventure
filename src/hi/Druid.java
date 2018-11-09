@@ -1,6 +1,6 @@
 package hi;
 
-public class Druid extends Character{
+public class Druid extends Adventurer{
 	Druid(String name,int health, int exp, int lv, int gold, Equipment[] inventory){
 		super(name, health, exp, lv, gold, inventory);
 	}

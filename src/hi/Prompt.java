@@ -8,7 +8,7 @@ public class Prompt {
 	static String playerChoice;
 	static Boolean checkChoice = false;
 	static Scanner input = new Scanner(System.in);
-	static Character player = GameWorld.getPlayer();
+	static Adventurer player = GameWorld.getPlayer();
 
 	Prompt(){
 		
@@ -62,7 +62,7 @@ public class Prompt {
 		checkChoice = false;
 	}
 	
-	public static void usePrompt(Character player, String[]... choices) {
+	public static void usePrompt(Adventurer player, String[]... choices) {
 		if (choices.length > 2) {
 			System.out.println("too many arguments passed to usePrompt");
 		}

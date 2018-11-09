@@ -2,7 +2,7 @@ package hi;
 
 import java.util.Scanner;
 
-public class Character {
+public class Adventurer {
 	Boolean godMode = false;
 	int def;
 	int atk;
@@ -28,7 +28,7 @@ public class Character {
 	Equipment[] inventory = new Equipment[5];
 	Scanner input = new Scanner(System.in);
 
-	Character(String name,int health, int exp, int lv, int gold, Equipment[] inventory){
+	Adventurer(String name,int health, int exp, int lv, int gold, Equipment[] inventory){
 		this.name = name;
 		this.health = health;
 		this.exp = exp;
@@ -37,7 +37,7 @@ public class Character {
 		this.inventory = inventory;
 	}
 	
-	Character() {
+	Adventurer() {
 		for (int b = 1; b < 4; b++) {
 			this.inventory[b] = null;
 		}
@@ -64,6 +64,10 @@ public class Character {
 
 	public int getLV() {
 		return this.lv;
+	}
+	
+	public Equipment[] getInventory() {
+		return this.inventory;
 	}
 
 	public Equipment getWeapon() {
@@ -294,6 +298,12 @@ public class Character {
 		this.atk = this.inventory[0].getStat();
 		this.atk += this.lvStatChange;
 		return this.atk;
+	}
+	
+	public int calculateDef() {
+		this.def = this.inventory[1].getStat();
+		this.def += this.lvStatChange;
+		return this.def;
 	}
 	
 	public void updateAtk(int change) {

@@ -12,7 +12,7 @@ public class Shop {
 		
 	}
 	
-	public static void runShop(Character player, Boss trueFinalBoss, Equipment[] sell) {
+	public static void runShop(Adventurer player, Boss trueFinalBoss, Equipment[] sell) {
 		sellList = new String[sell.length + 2];
 		System.out.println(sellList.length);
 		for (int io = 0; io < sell.length; io++) {
