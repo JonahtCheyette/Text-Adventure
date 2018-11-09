@@ -28,6 +28,15 @@ public class Character {
 	Equipment[] inventory = new Equipment[5];
 	Scanner input = new Scanner(System.in);
 
+	Character(String name,int health, int exp, int lv, int gold, Equipment[] inventory){
+		this.name = name;
+		this.health = health;
+		this.exp = exp;
+		this.lv = lv;
+		this.gold = gold;
+		this.inventory = inventory;
+	}
+	
 	Character() {
 		for (int b = 1; b < 4; b++) {
 			this.inventory[b] = null;
@@ -106,6 +115,10 @@ public class Character {
 		}
 	}
 	
+	public static void becomeClass(String name) {
+		System.out.println(name + " is now a Adventurer!\nYour stats and ability to use potions are about average now");
+	}
+	
 	public Boolean isSlotFull(int whichSlot) {
 		if(this.inventory[whichSlot] == null) {
 			return false;
@@ -124,7 +137,7 @@ public class Character {
 	}
 	
 	public void checkStatus() {
-		System.out.println("health: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold());
+		System.out.println("Level" + this.getLV() + "\nHealth: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold());
 		for(int c = 0; c < this.inventory.length; c++) {
 			this.openSlot(c+4, c, this.ivntFunctions[c]);
 		}
@@ -277,6 +290,12 @@ public class Character {
 		this.doGodMode();
 	}
 
+	public int calculateAtk() {
+		this.atk = this.inventory[0].getStat();
+		this.atk += this.lvStatChange;
+		return this.atk;
+	}
+	
 	public void updateAtk(int change) {
 		this.atk += change;
 		this.doGodMode();
@@ -358,11 +377,10 @@ public class Character {
 			if(boss instanceof Mob && ((Mob) boss).getCount() > 1) {
 				System.out.println(this.name + " throws the " + this.inventory[2].getName() + " at the group of " + boss.getName()
 				+ ", doing some damage to all of them");
-				((Mob)boss).itemDmg(this.inventory[w].getStat());
 			} else {
 				System.out.println(this.name + " throws the " + this.inventory[w].getName() + " at the " + boss.getName() + ", doing some damage");
-				boss.takeDmg(this.inventory[w].getStat());
 			}
+			boss.takeDmg(this.inventory[w].getStat());
 		} else if (this.inventory[w].function.equals("buffAtk")) {
 			System.out.println(this.name + "'s attack rises by " + this.inventory[w].getStat());
 			this.updateAtk(this.inventory[2].getStat());
@@ -389,7 +407,7 @@ public class Character {
 				System.out.println("The " + enemy.getName() + " narrowly avoided the attack");
 			} else {
 				System.out.println("the " + enemy.getName() + " was hit by the attack");
-				enemy.takeDmg(this.atk);
+				enemy.takeDmg(this.calculateAtk());
 			}
 		} else if (Prompt.checkPChoice(false,"run")) {
 			double gotHit = 6 * Math.random();

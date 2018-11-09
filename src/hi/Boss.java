@@ -34,7 +34,7 @@ public class Boss {
 			this.pMHealth[w] = 0;
 		}
 	}
-
+	
 	public int getHealth() {
 		return this.health;
 	}

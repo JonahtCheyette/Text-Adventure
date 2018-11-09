@@ -62,10 +62,11 @@ public class Prompt {
 		checkChoice = false;
 	}
 	
-	public static void usePrompt(Character player,String[]... choices) {
+	public static void usePrompt(Character player, String[]... choices) {
 		if (choices.length > 2) {
 			System.out.println("too many arguments passed to usePrompt");
 		}
+		dDisplay = choices.length - 1;
 		while (!checkChoice) {
 			System.out.print("What will " + player.getName() + " do? (");
 			for (int im = 0; im < choices[dDisplay].length; im++) {

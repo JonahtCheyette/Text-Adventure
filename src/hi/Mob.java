@@ -33,7 +33,7 @@ public class Mob extends Boss{
 			this.pMHealth[id] = 0;
 		}
 	}
-
+	
 	public int getHealth(int which) {
 		return this.health[which];
 	}

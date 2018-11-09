@@ -9,10 +9,24 @@ import java.util.Random;
  */
 
 public class GameWorld {
-	static Character player = new Character();
+	static Character[] player = new Character[] {new Character(), new Warrior(), new Druid()};
+	static int whichClass = 0;
 	
 	public static Character getPlayer() {
-		return player;
+		return player[whichClass];
+	}
+	
+	public static void setPlayer(Character newPlayer) {
+		if(newPlayer instanceof Druid) {
+			player[2] = newPlayer;
+			whichClass = 2;
+		} else if(newPlayer instanceof Warrior) {
+			player[1] = newPlayer;
+			whichClass = 1;
+		} else {
+			player[0] = newPlayer;
+			whichClass = 0;
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -75,14 +89,14 @@ public class GameWorld {
 		Forest startForest = new Forest(forestBosses, forestEnemies);
 		Town startTown = new Town(eclipse);
 		System.out.println("ADVICE: YOU CAN ENTER \"s\" AT ANY TIME TO VIEW YOUR STATUS AND INVENTORY");
-		player.addItemToInvt(woodSword);
+		player[whichClass].addItemToInvt(woodSword);
 		while (true) {
 			if (gameStart) {
 				Prompt.setPName();
 				gameStart = false;
 			}
 			if (startCave.caveComplete() && startForest.forestComplete()) {
-				System.out.println(player.getName() + " hears a low rumble, as if a heavy door were being pulled open");
+				System.out.println(player[whichClass].getName() + " hears a low rumble, as if a heavy door were being pulled open");
 				startCave.openDoor();
 			}
 			pastSellList = sellList;
@@ -90,15 +104,15 @@ public class GameWorld {
 			for (int ib = 0; ib < makeSure; ib++) {
 				sellList[ib] = fullEList[rand.nextInt(fullEList.length)];
 			}
-			if (player.getName().equals("tim")) {
+			if (player[whichClass].getName().equals("tim")) {
 				sellList[0] = mKey;
 			}
 			if (wentToTown) {
 				sellList = pastSellList;
 			}
-			System.out.println(player.getName()
+			System.out.println(player[whichClass].getName()
 					+ " is at a crossroads. There is a path that leads to a cave, another that leads to a forest, \nand one more that leads into a town.");
-			Prompt.usePrompt(player,choices);
+			Prompt.usePrompt(player[whichClass],choices);
 			if (Prompt.checkPChoice(false,"cave")) {
 				wentToTown = false;
 				startCave.runCave();
@@ -113,7 +127,7 @@ public class GameWorld {
 				}
 				wentToTown = true;
 			}
-			if (player.health <= 0) {
+			if (player[whichClass].health <= 0) {
 				startCave.playerDied();
 				Prompt.deathPrompt(woodSword);
 				gameStart = true;
