@@ -3,7 +3,7 @@ package hi;
 import java.util.Scanner;
 
 public class Adventurer {
-	Boolean godMode = false;
+	Boolean godMode = true;
 	int def;
 	int atk;
 	int oldExp;
