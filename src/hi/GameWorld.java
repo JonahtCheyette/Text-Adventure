@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * 
- * TODO:(in order of priority)add a multiline command for shopping, balance stuff, magic, statuses.
+ * TODO:(in order of priority)balance stuff, magic, statuses.
  *
  */
 
