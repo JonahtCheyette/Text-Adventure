@@ -64,7 +64,7 @@ public class Shop {
 					System.out.println(player.getName() + " decides to buy the " + sell[Prompt.getChoice()[io]].getName());
 					player.addItemToInvt(sell[Prompt.getChoice()[io]]);
 					player.updateGold(-1 * sell[Prompt.getChoice()[io]].price);
-					if(!player.getItemInSlot() && Prompt.getCorrectCount() == 1) {
+					if((!player.getItemInSlot() && Prompt.getCorrectCount() == 1)||(io == Prompt.getCorrectCount()-1)) {
 						Prompt.pause();
 					}
 				}
