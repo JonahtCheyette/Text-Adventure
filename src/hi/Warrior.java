@@ -45,10 +45,12 @@ public class Warrior extends Adventurer{
 		this.exp += gain;
 		this.lv = (int) (1.5 * Math.sqrt(this.exp));
 		if(this.mExpTracker == numOfTimes) {
-			this.lvStatChange = (int) ((this.lv * 2.5) - 2);
+			this.lvStatChange = (int) ((this.lv * 2.5) - 2.5);
 			System.out.println("You have gained " + (this.exp - this.oldExp) + " Exp. Your level is now " + this.lv);
-			this.updateAtk((this.lv - this.oldLv) * 2);
-			this.updateDef((this.lv - this.oldLv) * 2);
+			this.atk = this.inventory[0].getStat();
+			this.atk += this.lvStatChange;
+			this.def = this.inventory[1].getStat();
+			this.def += this.lvStatChange;
 			System.out.println("your Atk is now " + this.atk + "\nyour Def is now " + this.def);
 			this.mExpTracker = 0;
 		}

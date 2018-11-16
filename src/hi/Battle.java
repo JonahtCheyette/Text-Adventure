@@ -1,5 +1,6 @@
 package hi;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -102,11 +103,11 @@ public class Battle {
 		battle = 1;
 		groupDead = 0;
 		battleGoing = true;
-		for (int k = 0; k < effectLast.length; k++) {
-			for (int l = 0; l < tempStat[k].length; l++) {
-				effectLast[k][l] = -1;
-				tempStat[k][l] = 0;
-			}
+		for(int[] row : effectLast) {
+			Arrays.fill(row, -1);
+		}
+		for(int[] row : tempStat) {
+			Arrays.fill(row, 0);
 		}
 		playerAtkInit = player.getAtk();
 		playerDefInit = player.getDef();
@@ -131,15 +132,11 @@ public class Battle {
 					}
 					if (aliveCount[o] <= 0) {
 						whichGroupAlive[o] = false;
+						groupDead++;
 					} else {
 						whichGroupAlive[o] = true;
 						whichToAttack = o;
 						
-					}
-				}
-				for (int q = 0; q < battle; q++) {
-					if (!whichGroupAlive[q]) {
-						groupDead++;
 					}
 				}
 				if (groupDead < battle && player.getHealth() > 0) {
@@ -189,8 +186,7 @@ public class Battle {
 						enemyList[s].resetCounter();
 					}
 					player.attack(enemyList[whichToAttack]);
-					if (Prompt.checkPChoice(false,"run")) {
-						Prompt.setChoice("run");
+					if (player.getCheckRan()) {
 						return;
 					}
 					Battle.checkItemUsed();
@@ -214,7 +210,7 @@ public class Battle {
 					player.gainExp(enemyList[t].calculateExp(), battle);
 				}
 				itemUsed = false;
-				System.out.println(player.getName() + " won and gained gold! " + player.getName() + " now has " + player.getGold() + " pieces of gold. "
+				System.out.println(player.getName() + " won and gained gold! " + player.getName() + " has " + player.getGold() + " pieces of gold. "
 						+ player.getName() + " now has " + player.getHealth() + " health");
 			}
 			battle++;
@@ -229,11 +225,11 @@ public class Battle {
 	}
 
 	public static void bossBattle(Boss enemy) {
-		for (int u = 0; u < effectLast.length; u++) {
-			for (int v = 0; v < tempStat[u].length; v++) {
-				effectLast[u][v] = -1;
-				tempStat[u][v] = 0;
-			}
+		for(int[] row : effectLast) {
+			Arrays.fill(row, -1);
+		}
+		for(int[] row : tempStat) {
+			Arrays.fill(row, 0);
 		}
 		playerAtkInit = player.getAtk();
 		playerDefInit = player.getDef();
@@ -264,7 +260,7 @@ public class Battle {
 			player.updateGold(enemy.giveGold());
 			player.gainExp(enemy.calculateExp(), 1);
 			itemUsed = false;
-			System.out.println("You won and gained gold! you now have " + player.getGold() + " pieces of gold. You now have " + player.getHealth() + " health");
+			System.out.println("You won and gained gold! you now have " + player.getGold() + " pieces of gold. You have " + player.getHealth() + " health");
 		}
 	}
 }

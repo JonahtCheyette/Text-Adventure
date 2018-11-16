@@ -1,5 +1,7 @@
 package hi;
 
+import java.util.Arrays;
+
 public class Mob extends Boss{
 	int whichDmg;
 	int rangeMax;
@@ -16,21 +18,17 @@ public class Mob extends Boss{
 	Boolean damageTookCheck = false;
 
 	Mob(String name, String mName, int health, int atk, int rangeMin, int rangeMax, int minionHealth, int goldMax, int expMax, int expMin) {
-		super(name, mName, health, atk, goldMax, minionHealth, expMax, expMin);
+		super(name, mName, health, atk, minionHealth, goldMax, expMax, expMin);
 		this.rangeMin = rangeMin;
 		this.rangeMax = rangeMax;
 		this.atk = new int[rangeMax];
 		this.health = new int[rangeMax];
 		this.minions = new int[rangeMax];
-		for (int ic = rangeMin; ic < rangeMax; ic++) {
-			this.atk[ic] = -1;
-			this.health[ic] = -1;
-			if (minionHealth > 0) {
-				this.minions[ic] = -1;
-			}
-		}
-		for (int id = 0; id < this.pMHealth.length; id++) {
-			this.pMHealth[id] = 0;
+		Arrays.fill(this.atk,rangeMin, rangeMax, -1);
+		Arrays.fill(this.health,rangeMin, rangeMax, -1);
+		Arrays.fill(this.pMHealth, 0);
+		if (minionHealth > 0) {
+			Arrays.fill(this.minions, rangeMin, rangeMax, -1);
 		}
 	}
 	
@@ -104,19 +102,16 @@ public class Mob extends Boss{
 	
 	public void reset() {
 		this.count = (rand.nextInt((this.rangeMax - this.rangeMin) + 1) + this.rangeMin);
-		for (int ii = this.rangeMin; ii < this.rangeMax; ii++) {
-			this.atk[ii] = -1;
-			this.health[ii] = -1;
-			if (minionHealth > 0) {
-				this.minions[ii] = -1;
-			}
+		Arrays.fill(this.atk, rangeMin, rangeMax, -1);
+		Arrays.fill(this.health,rangeMin, rangeMax, -1);
+		Arrays.fill(this.pMHealth, 0);
+		if (minionHealth > 0) {
+			Arrays.fill(this.minions, rangeMin, rangeMax, -1);
 		}
-		for (int ij = 0; ij < this.count; ij++) {
-			this.atk[ij] = this.startAtk;
-			this.health[ij] = this.startHealth;
-			if (minionHealth > 0) {
-				this.minions[ij] = 0;
-			}
+		Arrays.fill(this.atk, 0, this.count, this.startAtk);
+		Arrays.fill(this.health, 0, this.count, this.startHealth);
+		if (minionHealth > 0) {
+			Arrays.fill(this.minions, 0, this.count, 0);
 		}
 	}
 

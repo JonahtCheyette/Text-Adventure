@@ -15,10 +15,4 @@ public class StatusEffect {
 	static void applyEffect() {
 		
 	}
-	
-	
-	//not sure If I'll need this one.
-	static void end(){
-		
-	}
 }

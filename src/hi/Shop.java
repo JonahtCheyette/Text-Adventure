@@ -22,17 +22,17 @@ public class Shop {
 		sellList[sell.length + 1] = "leave";
 		for (int ip = 0; ip < sell.length; ip++) {
 			if (sellList[ip] != null) {
-				System.out.println("\n" + sell[ip].getName() + " it is " + sell[ip].price + " gold");
+				System.out.println("\n" + sell[ip].getName() + " (" + sell[ip].price + " gold)");
 			}
 		}
-		System.out.println("\nStay a night in the inn and rest\n\nLeave the town\n\n" + player.getName() + " has " + player.getGold() + " gold");
+		System.out.println("\nStay a night in the inn and rest\n\nLeave the shop\n\n" + player.getName() + " has " + player.getGold() + " gold");
 		choices[0] = "type what you want to buy";
 		choices[1] = "rest";
 		choices[2] = "leave";
 		Prompt.shopPrompt(player, sellList, choices);
 		if (Prompt.checkPChoice(false, "rest")) {
 			System.out.println(player.getName() + " stays at the inn and rests. When " + player.getName()
-					+ " wakes up, they notice a seemingly random keyhole in the wall inscribed with the word tim above it");
+					+ " wakes up, they notice a seemingly random keyhole in the wall inscribed with the word \"tim\" above it");
 			player.rest();
 			if (player.getPassiveItem() != null && player.getPassiveItem().getName().equals("Mysterious Key")) {
 				System.out.println(player.getName() + " can either insert the Mysterious Key into the keyhole or leave the room.");

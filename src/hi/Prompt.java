@@ -79,8 +79,8 @@ public class Prompt {
 		if (choices.length > 2) {
 			System.out.println("too many arguments passed to usePrompt");
 		}
-		dDisplay = choices.length - 1;
 		while (!checkChoice) {
+			dDisplay = choices.length - 1;
 			System.out.print("What will " + player.getName() + " do? (");
 			for (int im = 0; im < choices[dDisplay].length; im++) {
 				if (choices[dDisplay][im] != null) {
@@ -134,9 +134,7 @@ public class Prompt {
 			}
 			System.out.print(")\n");
 			playerChoice = input.nextLine();
-			for(int io = 0; io < whereCommas.length; io++) {
-				whereCommas[io] = -1;
-			}
+			Arrays.fill(whereCommas, -1);
 			for (int io = 0; io < playerChoice.length(); io++){
 				if(playerChoice.substring(io, io+1).equalsIgnoreCase(",")) {
 					whereCommas[runThrough] = io;

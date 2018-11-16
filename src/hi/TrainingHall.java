@@ -12,7 +12,7 @@ public class TrainingHall {
 	}
 	
 	public static void runTrainingHall(Adventurer player) {
-		System.out.println(player.getName() + " goes into the training hall. The owner asks \"I can teach you new skills... for 150 gold.\"\n" + player.getName() + " has " + player.getGold() + "gold.");
+		System.out.println(player.getName() + " goes into the training hall. The owner asks \"I can teach you new skills... for 150 gold.\"\n" + player.getName() + " has " + player.getGold() + " gold.");
 		Prompt.yesNo("Adventurer", "Warrior", "Druid", "What class would you like to become?");
 		if(player.getGold() >= 150) {
 			player.updateGold(-150);

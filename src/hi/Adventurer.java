@@ -1,9 +1,10 @@
 package hi;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Adventurer {
-	Boolean godMode = true;
+	Boolean godMode = false;
 	int def;
 	int atk;
 	int oldExp;
@@ -14,6 +15,8 @@ public class Adventurer {
 	int lv = 1;
 	int health = 100;
 	int gold = 250;
+	int runThrough = 0;
+	int[] whichAreFull;
 	String name;
 	String fullIvnt;
 	String[] display = new String[2];
@@ -38,12 +41,11 @@ public class Adventurer {
 	}
 	
 	Adventurer() {
-		for (int b = 1; b < 4; b++) {
-			this.inventory[b] = null;
-		}
+		Arrays.fill(this.inventory, null);
 		this.atk = 0;
 		this.iNames[5] = "exit";
 		this.doGodMode();
+		this.inventory[0] = new Equipment("weapon", "Wood Sword", 30, 25, 0, "A wooden sword. More suited for practice bouts than actual combat.");
 	}
 
 	public void setName(String name) {
@@ -110,6 +112,18 @@ public class Adventurer {
 		return this.checkRan;
 	}
 	
+	public String[] getInventoryNames() {
+		this.runThrough = 0;
+		for(int i = 0; i < this.inventory.length;i++) {
+			if(this.inventory[i] != null) {
+				this.iNames[this.runThrough] = this.inventory[i].getName();
+				this.runThrough++;
+			}
+		}
+		this.runThrough = 0;
+		return iNames;
+	}
+	
 	public void doGodMode() {
 		if(this.godMode) {
 			this.atk = 1000000;
@@ -133,15 +147,15 @@ public class Adventurer {
 	
 	public void openSlot(int choiceNum, int whichSlot, String itemClass) {
 		if (this.isSlotFull(whichSlot)) {
-			System.out.println(itemClass + ": " + this.iNames[whichSlot]);
-			this.choices[choiceNum] = this.iNames[whichSlot];
+			System.out.println(itemClass + ": " + this.inventory[whichSlot].getName());
+			this.choices[choiceNum] = this.inventory[whichSlot].getName();
 		} else {
 			System.out.println(itemClass + ": none");
 		}
 	}
 	
 	public void checkStatus() {
-		System.out.println("Level" + this.getLV() + "\nHealth: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold());
+		System.out.println("Level: " + this.getLV() + "\nHealth: " + this.getHealth() + "\nAtk: " + this.getAtk() + "\nDef: " + this.getDef() + "\nGold: " + this.getGold());
 		for(int c = 0; c < this.inventory.length; c++) {
 			this.openSlot(c+4, c, this.ivntFunctions[c]);
 		}
@@ -149,19 +163,17 @@ public class Adventurer {
 		this.display[1] = "type an item's name to get that item's info";
 		this.check = false;
 		while(!this.check) {
-			Prompt.usePrompt(this,this.iNames, this.display);
+			Prompt.usePrompt(this,this.getInventoryNames(), this.display);
 			for(int d = 0; d < this.inventory.length; d++) {
-				if(Prompt.checkPChoice(false,this.choices[d+4])) {
+				if(Prompt.checkPChoice(false, this.choices[d+4])) {
 					System.out.println(this.inventory[d].getText());
 				}
 			}
 			if(Prompt.checkPChoice(false,"exit")) {
-				this.check = true;
+				return;
 			}
 		}
-		for(int e = this.display.length; e < this.choices.length; e++) {
-			this.choices[e] = null;
-		}
+		Arrays.fill(this.choices, this.display.length, this.choices.length, null);
 		this.doGodMode();
 	}
 
@@ -182,9 +194,7 @@ public class Adventurer {
 		this.gold = 250;
 		this.exp = 0;
 		this.lv = 1;
-		for (int f = 0; f < this.inventory.length; f++) {
-			this.inventory[f] = null;
-		}
+		Arrays.fill(this.inventory, null);
 		this.inventory[0] = equipment;
 	}
 
@@ -204,7 +214,6 @@ public class Adventurer {
 				this.fullIvnt = this.inventory[1].getName();
 			} else {
 				this.inventory[1] = Equipment;
-				this.iNames[1] = Equipment.getName();
 				this.def = Equipment.getStat() + this.lvStatChange;
 			}
 		} else if (Equipment.isItem()) {
@@ -214,7 +223,6 @@ public class Adventurer {
 					this.fullIvnt = this.inventory[4].getName();
 				}else {
 					this.inventory[4] = Equipment;
-					this.iNames[4] = Equipment.getName();
 				}
 			} else {
 				if (this.inventory[2] != null && this.inventory[3] != null) {
@@ -222,10 +230,8 @@ public class Adventurer {
 					this.fullIvnt = this.inventory[2].getName() + " and a " + this.inventory[3].getName();
 				} else if (this.inventory[2] == null) {
 					this.inventory[2] = Equipment;
-					this.iNames[2] = Equipment.getName();
 				} else {
 					this.inventory[3] = Equipment;
-					this.iNames[3] = Equipment.getName();
 				}
 			}
 		} else {
@@ -234,7 +240,6 @@ public class Adventurer {
 				this.fullIvnt = this.inventory[0].getName();
 			} else {
 				this.inventory[0] = Equipment;
-				this.iNames[0] = Equipment.getName();
 				this.atk = Equipment.getStat() + this.lvStatChange;
 			}
 		}
@@ -254,27 +259,22 @@ public class Adventurer {
 			if(Prompt.checkPChoice(false,"yes")) {
 				if (Equipment.isArmor()) {
 					this.inventory[1] = Equipment;
-					this.iNames[1] = Equipment.getName();
 					this.def = Equipment.getStat() + this.lvStatChange;
 				} else if (Equipment.isPassive()) {
 					this.inventory[4] = Equipment;
-					this.iNames[4] = Equipment.getName();
 				} else {
 					this.inventory[0] = Equipment;
-					this.iNames[0] = Equipment.getName();
 					this.atk = Equipment.getStat() + this.lvStatChange;
 				}
 			}
 			if(this.inventory[2] != null) {
 				if (Prompt.checkPChoice(false,this.inventory[2].getName())) {
 					this.inventory[2] = Equipment;
-					this.iNames[2] = Equipment.getName();
 				}
 			}
 			if(this.inventory[3] != null) {
 				if(Prompt.checkPChoice(false,this.inventory[2].getName())) {
 					this.inventory[3] = Equipment;
-					this.iNames[3] = Equipment.getName();
 				}
 			}
 		}
@@ -338,7 +338,7 @@ public class Adventurer {
 		}
 		this.mExpTracker ++;
 		this.exp += gain;
-		this.lv = (int) (1.5 * Math.sqrt(this.exp));
+		this.lv = (int) (Math.sqrt(this.exp));
 		if(this.mExpTracker == numOfTimes) {
 			this.lvStatChange = (this.lv * 2) - 2;
 			System.out.println("You have gained " + (this.exp - this.oldExp) + " Exp. Your level is now " + this.lv);
@@ -350,22 +350,18 @@ public class Adventurer {
 	}
 
 	public void attackPrompt() {
-		System.out.println(this.name + " has: " + this.health + " health");
+		Arrays.fill(this.choices, null);
+		System.out.println(this.name + " has " + this.health + " health");
 		if (this.inventory[2] == null) {
 			System.out.println(this.name + " can attack or run away.");
 			this.choices[0] = "attack";
 			this.choices[1] = "run";
-			this.choices[2] = null;
-			this.choices[3] = null;
-			Prompt.usePrompt(this,this.choices);
 		} else {
 			if (this.inventory[3] == null) {
 				System.out.println(this.name + " can attack, run away, or use their " + this.inventory[2].getName());
 				this.choices[0] = "attack";
 				this.choices[1] = "run";
 				this.choices[2] = this.inventory[2].getName();
-				this.choices[3] = null;
-				Prompt.usePrompt(this,this.choices);
 			} else {
 				System.out.println(
 						this.name + " can attack, run away, use their " + this.inventory[2].getName() + ", or they can use their " + this.inventory[3].getName());
@@ -373,9 +369,9 @@ public class Adventurer {
 				this.choices[1] = "run";
 				this.choices[2] = this.inventory[2].getName();
 				this.choices[3] = this.inventory[3].getName();
-				Prompt.usePrompt(this,this.choices);
 			}
 		}
+		Prompt.usePrompt(this,this.choices);
 	}
 
 	public void itemEffect(Boss boss, int w){

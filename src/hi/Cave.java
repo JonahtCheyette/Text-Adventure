@@ -72,7 +72,7 @@ public class Cave {
 					return;
 				} else {
 					this.gameWon = true;
-					System.out.println("YOU WIN!!!!!");
+					System.out.println("YOU WIN THE GAME!!!!!");
 					return;
 				}
 			}
