@@ -185,9 +185,11 @@ public class Battle {
 						}
 						enemyList[s].resetCounter();
 					}
-					player.attack(enemyList[whichToAttack]);
-					if (player.getCheckRan()) {
-						return;
+					if (player.getHealth() > 0) {
+						player.attack(enemyList[whichToAttack]);
+						if (player.getCheckRan()) {
+							return;
+						}
 					}
 					Battle.checkItemUsed();
 				}
