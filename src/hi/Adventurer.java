@@ -338,7 +338,7 @@ public class Adventurer {
 		}
 		this.mExpTracker ++;
 		this.exp += gain;
-		this.lv = (int) (Math.sqrt(this.exp));
+		this.lv = (int) (Math.sqrt(this.exp)/2);
 		if(this.mExpTracker == numOfTimes) {
 			this.lvStatChange = (this.lv * 2) - 2;
 			System.out.println("You have gained " + (this.exp - this.oldExp) + " Exp. Your level is now " + this.lv);
