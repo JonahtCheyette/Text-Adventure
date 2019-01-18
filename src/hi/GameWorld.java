@@ -11,24 +11,6 @@ import java.util.Random;
 public class GameWorld {
 	static Adventurer[] player = new Adventurer[] {new Adventurer(), new Warrior(), new Druid()};
 	static int whichClass = 0;
-
-	public static void type(String input){
-		char[] letters = input.toCharArray();
-		for (char x : letters){
-			System.out.print(x);
-			try{
-				Thread.sleep(45);
-			}catch(Exception e){
-				System.out.print("o fuk it broke");
-			}
-		}
-		try{
-				Thread.sleep(300);
-			}catch(Exception e){
-				System.out.print("o fuk it broke");
-			}
-		System.out.print("\n");
-	}
 	
 	public static void setPlayer(String toWhat) {
 		if(toWhat.equalsIgnoreCase("Warrior")) {
@@ -106,14 +88,14 @@ public class GameWorld {
 		Cave startCave = new Cave(caveBosses, caveEnemies, jadeDragon);
 		Forest startForest = new Forest(forestBosses, forestEnemies);
 		Town startTown = new Town(eclipse);
-		type("ADVICE: YOU CAN ENTER \"s\" AT ANY TIME TO VIEW YOUR STATUS AND INVENTORY");
+		System.out.println("ADVICE: YOU CAN ENTER \"s\" AT ANY TIME TO VIEW YOUR STATUS AND INVENTORY");
 		while (true) {
 			if (gameStart) {
 				Prompt.setPName();
 				gameStart = false;
 			}
 			if (startCave.caveComplete() && startForest.forestComplete()) {
-				type(player[whichClass].getName() + " hears a low rumble, as if a heavy door were being pulled open");
+				System.out.println(player[whichClass].getName() + " hears a low rumble, as if a heavy door were being pulled open");
 				startCave.openDoor();
 			}
 			pastSellList = sellList;
@@ -127,7 +109,7 @@ public class GameWorld {
 			if (wentToTown) {
 				sellList = pastSellList;
 			}
-			type(player[whichClass].getName()
+			System.out.println(player[whichClass].getName()
 					+ " is at a crossroads. There is a path that leads to a cave, another that leads to a forest, \nand one more that leads into a town.");
 			Prompt.usePrompt(player[whichClass],choices);
 			if (Prompt.checkPChoice(false,"cave")) {
