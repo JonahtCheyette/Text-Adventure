@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GameWorld",
+            "request": "launch",
+            "mainClass": "hi.GameWorld"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GameWorld",
+            "request": "launch",
+            "mainClass": "hi.GameWorld",
+            "projectName": "Text-Adventure"
+        }
+    ]
+}
